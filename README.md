@@ -7,7 +7,10 @@ part of speech, by grammatical number — rather than by a single cherry-picked 
 results are validated three independent ways: against the raw annotation file, against the
 corpus maintainers' current revision [2], and token-by-token against the canonical Uthmani text
 [3] through the JQuranTree API [4]. All 3,960 counted occurrences are indexed by
-chapter:verse:word so that any number in this document can be checked by hand.
+chapter:verse:word so that any number in this document can be checked by hand. On top of the
+counts, [§5](#5-claims-audit) audits 31 popular numerical claims about the Quran — Nawfal's
+word pairs, "yawm = 365", "sea : land = 71% : 29%" — each evaluated against every counting
+method, with an explicit verdict and the exact selection behind every reproducing number.
 
 *Counts computed and audited 2026-06-11 from corpus morphology v0.4 (frozen snapshot, committed
 in `data/`). An earlier iteration of this project published several incorrect figures; the audit
@@ -45,11 +48,13 @@ imperative, of which *qul* ("say!", 2nd masculine singular) is 332. Embryology s
 turab (dust) 17 → nutfa (drop) 12 → alaqa (clot) 6 → mudgha (lump) 3 → izam (bones) 15 →
 lahm (flesh) 12.
 
-Two results that contradict popular claims, stated plainly:
+Two results that nuance popular claims, stated plainly:
 
 - **Yawm (day) singular is 375, not 365.** The widely circulated "365 days" figure does not
-  hold at the lemma level in this corpus (405 total = 375 singular + 27 plural + 3 dual);
-  yawma'idhin ("that day", 68×) is a separate lemma and is not part of the 405.
+  hold at the lemma or singular level in this corpus (405 total = 375 singular + 27 plural +
+  3 dual); yawma'idhin ("that day", 68×) is a separate lemma and is not part of the 405. The
+  365 reproduces only under a specific convention — singular, excluding the 10 occurrences
+  with an attached pronoun ("their day") — documented in the claims audit (§5, C22).
 - **Shahr (month) singular is 12**, which does match the popular claim.
 
 ![Pairs chart](output/pairs_bars.png)
@@ -152,9 +157,10 @@ by line against the raw file and by the validation layers below.
 Three independent layers, strongest last:
 
 1. **Internal.** The parser's STEM count is asserted against an independent scan of the raw
-   file (77,915). Sixteen sanity asserts pin the audited values in notebook 03; the
+   file (77,915). Sixteen sanity asserts pin the audited values in notebook 03, and notebook 04
+   asserts every claims-audit verdict and its key counts; the
    occurrence index is asserted to tie out with the count grid for all 38 words. The unit and
-   integration test suite (`tests/`, 21 tests) pins the same invariants for CI-style checking.
+   integration test suite (`tests/`, 34 tests) pins the same invariants for CI-style checking.
 2. **Upstream revision.** Every root used by the 38 words (35 roots) was compared against the
    corpus maintainers' dictionary pages [2] — every root total and every per-lemma count
    matched exactly (~140 numbers). Notebook 03 §9 records the comparison.
@@ -168,7 +174,92 @@ To verify any single number yourself: filter [`output/occurrences.csv`](output/o
 to the word — every counted occurrence is listed with its location, surface form, lemma, POS,
 and number — and look the locations up in any Quran text or at corpus.quran.com.
 
-## 5. Limitations and interpretive notes
+## 5. Claims audit
+
+Popular numerical claims about Quranic word counts circulate widely — almost always without a
+stated counting method. This section evaluates each circulating claim against **every uniform
+counting method in §3.3** (plus token-level grids: definite article, pronoun-suffix exclusion,
+exact surface form, named grammatical category), so each gets an explicit, reproducible
+verdict. The claims were collected (2026-06-11) from the three lineages that copy from each
+other — Nawfal's book [10], the viral "Tariq Al-Suwaidan" pamphlet list, and Harun Yahya's
+*Word Repetitions in the Qur'an* chapter [12] — plus the critique literature that quotes claims
+precisely [13, 14]. Computation: `notebooks/04_claims_audit.ipynb`; per-claim sources and
+notes: [`output/claims_audit.csv`](output/claims_audit.csv); every count under every method:
+[`output/claims_audit_grid.csv`](output/claims_audit_grid.csv).
+
+Verdicts: **holds (lemma)** — reproduces at this project's headline lemma level;
+**holds (uniform)** — reproduces under some uniform method, the *same* selection applied to
+both sides; **mixed methods only** — each side reproduces but only under a *different* method;
+**one side only**; **does not hold** — no method examined reproduces it. The b-suffixed ids
+are circulating variants of the same claim with different numbers.
+
+| # | Claim | Claimed | Verdict | Reproduces under |
+|---|---|---|---|---|
+| C01 | Dunya = Akhira (الدنيا / الآخرة) | 115 : 115 | holds (lemma) | lemma; singular; singular definite; no pron suffix |
+| C02 | Mala'ika = Shayatin (الملائكة / الشياطين) | 88 : 88 | holds (lemma) | lemma |
+| C03 | Hayat = Mawt (الحياة / الموت) | 145 : 145 | **does not hold** | — |
+| C04 | Rajul = Imra'a (رجل / امرأة) | 24 : 24 | holds (uniform) | singular |
+| C04b | Rajul = Imra'a ("chromosome pairs") | 23 : 23 | **does not hold** | — |
+| C05 | Salihat = Sayyi'at (الصالحات / السيئات) | 167 : 167 | one side only | sayyi'at: root (salihat root = 180) |
+| C06 | Qul = Qalu (قل / قالوا) | 332 : 332 | holds (uniform) | imperative 2MS / perfect 3MP of qāla |
+| C07 | Iblis = isti'adha (إبليس / الاستعاذة منه) | 11 : 11 | one side only | iblis: lemma (refuge-seeking totals 17) |
+| C08 | Zakat = Baraka (الزكاة / البركة) | 32 : 32 | mixed methods only | zakat: lemma / baraka: root |
+| C09 | Abrar : Fujjar (الأبرار / الفجار) | 6 : 3 | holds (uniform) | exact form |
+| C10 | Yusr : Usr (اليسر / العسر) | 36 : 12 | one side only | usr: root (yusr root = 44, lemma 7) |
+| C11 | Naf' = Fasad (النفع / الفساد) | 50 : 50 | holds (uniform) | root |
+| C12 | Nas = Anbiya' (الناس / الأنبياء) | 50 : 50 | **does not hold** | — |
+| C13 | Muhammad = Sharia (محمد / شريعة) | 4 : 4 | one side only | muhammad: lemma (sharia occurs 1×, root 5) |
+| C14 | Iman = Kufr (الإيمان / الكفر) | 25 : 25 | holds (uniform) | lemma, no pron suffix |
+| C15 | Musiba = Shukr (مصيبة / شكر) | 75 : 75 | one side only | shukr: root (musiba root = 77) |
+| C16 | Jahr = 'Alaniya (الجهر / العلانية) | 16 : 16 | holds (uniform) | root |
+| C17 | Harr = Bard (الحر / البرد) | 4 : 4 | holds (lemma) | lemma+variants |
+| C17b | Harr = Bard ("summer/winter") | 5 : 5 | one side only | bard: root, incl. barad "hail" |
+| C18 | Lisan = Maw'iza (لسان / موعظة) | 25 : 25 | holds (uniform) | root |
+| C19 | Nabat = Shajar (نبات / شجر) | 26 : 26 | mixed methods only | nabat: root / shajar: lemma (root = 27) |
+| C20 | Jaza' : Maghfira (جزاء / مغفرة) | 117 : 234 | one side only | maghfira: root (jaza' root = 118) |
+| C21 | Adam = Isa (آدم / عيسى) | 25 : 25 | holds (lemma) | lemma |
+| C22 | Yawm (يوم) | 365 | holds (uniform) | singular, no pron suffix (lemma 405, singular 375) |
+| C23 | Ayyam + Yawmayn (أيام / يومين) | 30 | holds (uniform) | plural+dual (27 + 3) |
+| C24 | Shahr (شهر) | 12 | holds (uniform) | singular (lemma 21) |
+| C25 | Bahr : Barr (البحر / البر), "= 71% : 29%" | 32 : 13 | holds (uniform) | singular definite — see caveat below |
+| C26 | Sab' samawat (سبع سماوات) | 7 | holds (uniform) | phrase count (5 + 2 word orders) |
+| C27 | Salawat (صلوات) | 5 | holds (uniform) | plural (lemma 83) |
+| C27b | Salat + derivatives (صلاة) | 67 | holds (uniform) | singular, no pron suffix (root 99) |
+| C28 | Rahma (رحمة), "= number of surahs" | 114 | holds (lemma) | lemma |
+
+Distribution: 5 hold at the lemma level, 14 hold under some other uniform method, 2 reproduce
+only by mixing methods between the two sides, 7 reproduce on one side only, 3 reproduce under
+nothing examined. The genre is neither uniformly right nor uniformly wrong — which is exactly
+why per-claim, per-method verdicts are worth publishing.
+
+Observations the verdict column compresses:
+
+- **The most famous claims split.** 115/115, 88/88, 25/25 (Adam/Isa) and qul/qālū 332/332 hold
+  cleanly; **ḥayāt/mawt 145/145 — equally famous — reproduces under nothing** (lemmas 76/50,
+  roots 184/165); the "with derivatives" wording attached to it matches no derivative set in
+  the corpus.
+- **Critics' reverse-engineered conventions check out arithmetically.** Yawm = 365 is exactly
+  singular minus the 10 pronoun-suffixed occurrences ("their day"); īmān/kufr = 25/25 is
+  exactly the same exclusion applied to those lemmas (from 45/37). The same convention applied
+  across the grid breaks other equalities (malāʾika/shayāṭīn become 83/87), so it is not a
+  generally miracle-friendly selection — each claim needs its own convention.
+- **The viral sea/land 32 : 13 reproduces under "singular + definite article" — but** the 13
+  includes 52:28, the divine name *al-Barr* ("the Most Kind"), not the word "land" (the land
+  count is 12, §2.3); and the percentage step (32⁄45 = 71.1% "= Earth's water share") is an
+  inference no word count can carry.
+- **Three pairs nobody seems to verify hold exactly at the root level:** nafʿ/fasād 50/50,
+  jahr/ʿalāniya 16/16, lisān/mawʿiẓa 25/25.
+- **Look-elsewhere effect, stated plainly:** each claim was tested against ~11 methods, so a
+  single match is weak evidence by itself. The value of the audit is that the method behind
+  every number is now explicit and reproducible — including for the claims that hold.
+- **Counts are not inferences.** Where a count reproduces, any claim built on top of it
+  (= days of the year, = number of surahs, = Earth's water ratio, = chromosome count) is a
+  separate, non-arithmetic assertion that a frequency table can neither confirm nor refute.
+- **Validation scope:** claim words outside the 38-word set (nafʿ, fasād, lisān, …) are counted
+  with the same parser and frozen corpus snapshot, but have not been token-validated against
+  the Uthmani text the way the 38 words were (§4).
+
+## 6. Limitations and interpretive notes
 
 - **Counts inherit the corpus's annotation decisions.** Where those decisions are surprising
   (bones under `EaZiym`, the Akhira lemma conflation, niswa under `nisaA^'`), this project
@@ -183,18 +274,19 @@ and number — and look the locations up in any Quran text or at corpus.quran.co
 - Word selection (the 38 words and the 15 pairings) follows the task specification
   (`TASK.txt`), not a linguistic criterion.
 
-## 6. Prior and related work
+## 7. Prior and related work
 
 - **The classical counting tradition.** Word counts of the Quran long predate computers; the
   standard reference is ʿAbd al-Bāqī's concordance [9], compiled by hand, which underlies most
   published figures. This project is the same exercise done against a machine-readable,
   morphologically tagged text, where every methodological choice is explicit and re-runnable.
 - **Popular "numerical balance" claims.** The word-pair genre (dunya/akhira, angels/devils,
-  life/death appearing equally often) was popularized by Nawfal [10] and circulates widely.
-  Some of those claims reproduce exactly at the lemma level here (115/115, 88/88, 25/25);
-  others do not under *any* method in the grid (life/death is 76–79 vs 50–56, not 145/145;
-  yawm singular is 375, not 365). This project neither set out to confirm nor refute the
-  genre — it reports what a tagged corpus yields under uniform rules.
+  life/death appearing equally often) was popularized by Nawfal [10] and circulates widely,
+  almost always without a stated counting method. Section 5 audits 31 circulating claims
+  against every method in the grid; published critiques [13, 14] quote the claims precisely
+  but had not, to our knowledge, been answered with a systematic per-claim, per-method table.
+  This project neither set out to confirm nor refute the genre — it reports what a tagged
+  corpus yields under uniform, stated rules.
 - **Computational resources.** The Quranic Arabic Corpus and its annotation methodology
   [1, 8] are the foundation; Tanzil [3] provides the underlying verified text; JQuranTree [4],
   QuranTree.jl [5], and python-qurancorpus [6] are the existing programmatic interfaces.
@@ -202,13 +294,10 @@ and number — and look the locations up in any Quran text or at corpus.quran.co
 - **Earlier iteration of this repository.** Notebooks 01/02 predate the audit; their published
   figures contained the errors documented in §2 and have been corrected in place.
 
-## 7. Future work
+## 8. Future work
 
 - **Full-vocabulary release** — extend the grid from the 38 selected words to every lemma and
   root in the corpus, as a citable frequency table.
-- **Claims audit** — a systematic table of popular numerical claims, each evaluated against
-  every counting method, so that "holds / holds only under method X / does not hold" is
-  explicit per claim.
 - **Cross-resource comparison** — quantify divergences between corpus v0.4, the website's
   current revision, QuranMorph [11], and ʿAbd al-Bāqī [9]; annotation differences like the
   bones case (§2.1) suggest more such cases exist outside our 38 words.
@@ -218,34 +307,37 @@ and number — and look the locations up in any Quran text or at corpus.quran.co
 - **Continuous verification** — run the test suite and token-level validation automatically on
   every change (CI), so the pinned numbers cannot drift silently.
 
-## 8. Reproducing
+## 9. Reproducing
 
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/). The data file is committed (license
-permits verbatim copies — see [Data](#9-data-and-licensing)), so a fresh clone is self-contained:
+permits verbatim copies — see [Data](#10-data-and-licensing)), so a fresh clone is self-contained:
 
 ```bash
 git clone <this-repo> && cd quran-frequencies
 uv sync
 uv run jupyter notebook        # run the notebooks
-uv run --extra dev pytest      # run the test suite (21 tests)
+uv run --extra dev pytest      # run the test suite (34 tests)
 ```
 
 | Path | Contents |
 |---|---|
 | `notebooks/01_explore_and_discover.ipynb` | Lemma discovery per word, validation against sample verses, the four-method count |
 | `notebooks/02_results_and_exploration.ipynb` | Pair tables, embryology sequence, open-ended exploration |
-| `notebooks/03_audit_and_full_recount.ipynb` | **Authoritative**: audit evidence, full method grid, root listings, Qaala breakdown, validation record, chart generation |
+| `notebooks/03_audit_and_full_recount.ipynb` | **Authoritative for the 38 words**: audit evidence, full method grid, root listings, Qaala breakdown, validation record, chart generation |
+| `notebooks/04_claims_audit.ipynb` | **Claims audit** (§5): claims registry with sources, every claim under every method, verdicts, per-claim forensics |
 | `output/full_counts.csv` | The complete method grid, one row per word |
 | `output/occurrences.csv` | Every counted occurrence with chapter:verse:word location |
+| `output/claims_audit.csv` | One row per claim: claimed numbers, verdict, methods it reproduces under, sources, notes |
+| `output/claims_audit_grid.csv` | Every claim × every method × both sides, with match flags |
 | `output/pairs_bars.png`, `output/pairs_table.png` | Charts (regenerated by notebook 03) |
 | `src/parser.py`, `src/buckwalter.py` | Morphology TSV parser; Buckwalter ↔ Arabic conversion |
 | `tests/` | Unit tests (16-line verbatim fixture) + integration tests (pinned audited counts) |
 | `validation/` | Token-level validation scripts (Python + Java) and report |
 
-Everything in `output/` regenerates by running notebook 03 top to bottom. The token validation
-is re-run with the commands in the docstring of `validation/validate_locations.py`.
+Everything in `output/` regenerates by running notebooks 03 and 04 top to bottom. The token
+validation is re-run with the commands in the docstring of `validation/validate_locations.py`.
 
-## 9. Data and licensing
+## 10. Data and licensing
 
 The single data source is the **Quranic Arabic Corpus morphology file, v0.4** [1]
 (`data/quranic-corpus-morphology-0.4.txt`, 77,915 STEM entries among 128,219 segment records),
@@ -283,6 +375,15 @@ Code in this repository (parser, notebooks, tests, validation scripts) is the au
     Quran). — the work that popularized the word-pair balance claims.
 11. Akra, D., Hammouda, T., & Jarrar, M. (2025). "QuranMorph: Morphologically Annotated Quranic
     Corpus." arXiv:2506.18148. https://arxiv.org/abs/2506.18148
+12. Harun Yahya (Adnan Oktar). "Word Repetitions in the Qur'an," in *Allah's Miracles in the
+    Qur'an.* https://www.harunyahya.com/en/works/27625/word-repetitions-in-the-quran — one of
+    the three claim lineages audited in §5.
+13. *Word Count Miracles in the Qur'an.* WikiIslam.
+    https://wikiislam.net/wiki/Word_Count_Miracles_in_the_Qur%27an — critique pages that quote
+    the claims and their counting conventions precisely.
+14. IslamQA, fatwa 69741 (quoting Fahd al-Rūmī, *Dirāsāt fī ʿUlūm al-Qurʾān*).
+    https://islamqa.info/en/answers/69741 — a critique of numerical-miracle claims from within
+    the Islamic scholarly tradition; documents the conventions behind yawm = 365.
 
 ## Appendix: corpus format and transliteration
 

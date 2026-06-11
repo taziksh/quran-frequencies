@@ -2,6 +2,8 @@
 # generated outputs are ignored except the cited verification artifacts
 output/*
 !output/full_counts.csv
+!output/claims_audit.csv
+!output/claims_audit_grid.csv
 !output/occurrences.csv
 !output/pairs_table.png
 __pycache__/

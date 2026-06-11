@@ -117,11 +117,10 @@ def load_morphology(path: str | Path | None = None) -> pd.DataFrame:
     return df
 
 
-def load_prefixes(path: str | Path | None = None) -> set[tuple[int, int, int]]:
-    """Load the morphology file and return a set of (chapter, verse, word) tuples
-    that have a definite article prefix (Al+)."""
+def _load_marked_words(path: str | Path | None, marker: str) -> set[tuple[int, int, int]]:
+    """Return the set of (chapter, verse, word) tuples whose FEATURES contain marker."""
     path = Path(path) if path else DATA_PATH
-    definite_words: set[tuple[int, int, int]] = set()
+    words: set[tuple[int, int, int]] = set()
 
     with open(path, encoding="utf-8") as f:
         for line in f:
@@ -132,8 +131,20 @@ def load_prefixes(path: str | Path | None = None) -> set[tuple[int, int, int]]:
             if len(parts) != 4:
                 continue
             location, form, tag, features_str = parts
-            if "PREFIX|Al+" in features_str:
+            if marker in features_str:
                 loc = parse_location(location)
-                definite_words.add((loc[0], loc[1], loc[2]))
+                words.add((loc[0], loc[1], loc[2]))
 
-    return definite_words
+    return words
+
+
+def load_prefixes(path: str | Path | None = None) -> set[tuple[int, int, int]]:
+    """Load the morphology file and return a set of (chapter, verse, word) tuples
+    that have a definite article prefix (Al+)."""
+    return _load_marked_words(path, "PREFIX|Al+")
+
+
+def load_pron_suffixes(path: str | Path | None = None) -> set[tuple[int, int, int]]:
+    """Load the morphology file and return a set of (chapter, verse, word) tuples
+    that have an attached pronoun suffix (e.g. yawmu-hum 'their day')."""
+    return _load_marked_words(path, "SUFFIX|PRON:")

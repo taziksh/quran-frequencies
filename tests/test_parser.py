@@ -5,7 +5,13 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from src.parser import load_morphology, load_prefixes, parse_features, parse_location
+from src.parser import (
+    load_morphology,
+    load_prefixes,
+    load_pron_suffixes,
+    parse_features,
+    parse_location,
+)
 
 FIXTURE = Path(__file__).parent / "fixtures" / "mini_morphology.txt"
 
@@ -76,3 +82,8 @@ def test_load_prefixes():
     definite = load_prefixes(FIXTURE)
     assert (1, 1, 3) in definite      # {l (Al+) before r~aHoma`ni
     assert (1, 1, 1) not in definite  # bi+ is not the definite article
+
+
+def test_load_pron_suffixes():
+    suffixed = load_pron_suffixes(FIXTURE)
+    assert suffixed == {(2, 14, 10)}  # $aya`Tiyni-him "their devils"
