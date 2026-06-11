@@ -232,6 +232,11 @@ only by mixing methods between the two sides, 7 reproduce on one side only, 3 re
 nothing examined. The genre is neither uniformly right nor uniformly wrong — which is exactly
 why per-claim, per-method verdicts are worth publishing.
 
+![Claims audit matrix](output/claims_audit_matrix.png)
+
+(A colored cell = the claimed numbers reproduce exactly under that method; light gray =
+computed, no match; white = method not applicable. Regenerates from notebook 04.)
+
 Observations the verdict column compresses:
 
 - **The most famous claims split.** 115/115, 88/88, 25/25 (Adam/Isa) and qul/qālū 332/332 hold
