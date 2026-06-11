@@ -1,0 +1,14 @@
+[project]
+name = "quran-frequencies"
+version = "0.1.0"
+description = "Count word frequencies in the Quran using the Quranic Arabic Corpus morphology data"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas",
+    "jupyter",
+    "tabulate",
+    "matplotlib>=3.10.9",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]

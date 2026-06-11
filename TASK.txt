@@ -1,0 +1,58 @@
+Quran Word Frequency Counter
+
+Count occurrences of specific Arabic words in the Quran using the Quranic Arabic Corpus morphology file (v0.4), downloadable from https://corpus.quran.com/download/
+
+The JQuranTree Java API (https://github.com/dsog/jqurantree) can also be used for cross-validation.
+
+For each word below, count occurrences using every reasonable method: by lemma, by root, by POS filter (noun, adjective, proper noun, verb), by number (singular vs plural/dual), and combinations thereof. Report all counts.
+
+Words to count:
+
+Dunya (this world) - دنيا
+Akhira (hereafter) - آخرة
+Malak (angel) - ملك (the angel meaning)
+Shaytan (satan) - شيطان
+Hayat (life) - حياة
+Mawt (death) - موت
+Rajul (man) - رجل
+Mar'a / Imra'a (woman) - امرأة
+Shahr (month) - شهر
+Yawm (day) - يوم
+Bahr (sea) - بحر
+Barr (land) - بر
+Jannah (heaven/garden) - جنة
+Jahannam (hell) - جهنم
+Harr (hot) - حر
+Bard (cold) - برد
+Zakat - زكاة
+Baraka (blessing) - بركة
+Qaala (said) - قال (break down by verb form: imperative, perfect 3MP, etc.)
+Adhab (punishment) - عذاب
+Rahma (mercy) - رحمة
+Maghfira (forgiveness) - مغفرة
+Ghani (rich) - غني
+Faqir (poor) - فقير
+Hasana (good deed) - حسنة
+Sayyi'a (bad deed) - سيئة
+Adam - آدم
+Isa/Jesus - عيسى
+Insan (human) - إنسان
+Iblis - إبليس
+Iman (belief) - إيمان
+Kufr (disbelief) - كفر
+Turab (dust) - تراب
+Nutfa (sperm drop) - نطفة
+Alaqa (clot) - علقة
+Mudgha (lump) - مضغة
+Izam (bones) - عظم
+Lahm (flesh) - لحم
+
+Morphology file format:
+- Tab-separated: LOCATION, FORM, TAG, FEATURES
+- Lines starting with # are comments
+- Only FEATURES starting with "STEM" are word entries
+- FEATURES has pipe-separated fields like: STEM|POS:N|LEM:d~unoyaA|ROOT:dnw|FS|GEN
+- POS = part of speech, LEM = lemma, ROOT = trilateral root
+- Buckwalter transliteration is used (^ = maddah, ~ = shadda)
+
+For roots with multiple derived words, list all lemmas under that root with their counts.

@@ -1,0 +1,39 @@
+Word,Arabic,Lemma(BW),Lemma,Lemma+Variants,Singular,Dual,Plural,Lem N,Lem ADJ,Lem PN,Lem V,Lem T,RootAll,Root N,Root ADJ,Root PN,Root V,Root T,RootNominal,Root,Note
+Dunya,دنيا,d~unoyaA,115,115,115,0,0,41,74,0,0,0,133,54,76,0,2,1,131,dnw,
+Akhira,آخرة,A^xir,115,115,115,0,0,111,4,0,0,0,250,178,47,0,24,1,226,Axr,Fem 'hereafter' only; masc 'last/latter' (40x) is a different word sharing the lemma.
+Malak (angel),ملك,malak,88,88,13,2,73,88,0,0,0,0,206,159,2,1,44,0,162,mlk,"Includes ملائكة (73 pl + 2 dual). Root mlk also has malik(king), mulk(dominion) — different lemmas."
+Shaytan,شيطان,$ayoTa`n,88,88,70,0,18,8,0,80,0,0,88,8,0,80,0,0,88,$Tn,Includes شياطين (18 pl).
+Hayat,حياة,Hayaw`p,76,79,76,0,0,76,0,0,0,0,184,112,1,0,71,0,113,Hyy,"Variants: maHyaA(2), HayawaAn(1) — symmetric with Mawt's variants (see 2.4)."
+Mawt,موت,mawot,50,56,50,0,0,50,0,0,0,0,165,96,9,0,60,0,105,mwt,"Variants: mawotat(3), mamaAt(3)."
+Rajul,رجل,rajul,29,57,24,5,0,29,0,0,0,0,73,73,0,0,0,0,73,rjl,"rijaAl(28) = broken plural. rijol(15) = feet, different word."
+Imra'a,امرأة,{mora>at,26,85,24,2,0,26,0,0,0,0,38,37,1,0,0,0,38,mrA,"nisaA''(59, incl. niswa 2x) = suppletive plural, root nsw."
+Shahr,شهر,$ahor,21,21,12,2,7,21,0,0,0,0,21,21,0,0,0,0,21,$hr,Includes أشهر/شهور (7 pl + 2 dual).
+Yawm,يوم,yawom,405,405,375,3,27,325,0,0,0,80,405,325,0,0,0,80,405,ywm,Includes أيام (27 pl) + يومين (3 dual). yawma'idhin (68x) is a separate lemma.
+Bahr,بحر,baHor,41,41,33,5,3,41,0,0,0,0,42,42,0,0,0,0,42,bHr,Includes أبحر/بحار (3 pl + 5 dual).
+Barr,بر,bar~,22,22,15,0,7,21,1,0,0,0,32,29,1,0,2,0,30,brr,Lemma conflates land(12) + righteous/dutiful(10) — see 2.3. bir~(8) is a separate lemma.
+Jannah,جنة,jan~ap,147,147,68,8,71,96,0,51,0,0,201,149,0,51,1,0,200,jnn,"Includes جنات (71 pl + 8 dual). Root jnn also has jinn, majnun — different lemmas."
+Jahannam,جهنم,jahan~am,77,77,77,0,0,0,0,77,0,0,,,,,,,,—,"Proper noun, no root in corpus."
+Harr,حر,Har~,3,4,3,0,0,3,0,0,0,0,15,15,0,0,0,0,15,Hrr,"Haruwr(1) = scorching heat. Hur~(2) = free man, different word."
+Bard,برد,barod,2,4,2,0,0,2,0,0,0,0,5,5,0,0,0,0,5,brd,"baArid(2) = cold (adj). barad(1) = hail, excluded."
+Zakat,زكاة,zakaw`p,32,32,32,0,0,32,0,0,0,0,59,37,1,0,21,0,38,zkw,
+Baraka,بركة,baraka`t,3,15,0,0,3,3,0,0,0,0,32,12,3,0,17,0,15,brk,Singular بركة does not occur; barakat(3) is the plural. Variants = blessed (adj/noun).
+Qaala,قال,qaAla,1618,1618,1068,9,541,0,0,0,1618,0,1722,102,0,0,1620,0,102,qwl,Verb — full form breakdown in section 6.
+Adhab,عذاب,Ea*aAb,322,322,322,0,0,322,0,0,0,0,373,332,0,0,41,0,332,E*b,
+Rahma,رحمة,raHomap,114,114,114,0,0,114,0,0,0,0,339,187,124,0,28,0,311,rHm,
+Maghfira,مغفرة,m~agofirap,28,29,28,0,0,28,0,0,0,0,234,97,32,0,105,0,129,gfr,guforaAn(1) = synonym.
+Ghani,غني,ganiY~,24,24,20,0,4,20,4,0,0,0,73,22,4,0,47,0,26,gny,
+Faqir,فقير,faqiyr,12,12,5,0,7,10,2,0,0,0,14,12,2,0,0,0,14,fqr,
+Hasana,حسنة,Hasanap,28,31,28,0,0,25,3,0,0,0,194,138,32,0,24,0,170,Hsn,
+Sayyi'a,سيئة,say~i}ap,22,58,22,0,0,21,1,0,0,0,167,128,4,0,35,0,132,swA,
+Adam,آدم,A^dam,25,25,25,0,0,0,0,25,0,0,,,,,,,,—,"Proper noun, no root."
+Isa,عيسى,EiysaY,25,25,25,0,0,0,0,25,0,0,,,,,,,,—,"Proper noun, no root."
+Insan,إنسان,<insa`n,71,89,65,0,6,71,0,0,0,0,97,91,0,0,6,0,91,Ans,"Lemma includes أناس/أناسي (6 pl). <ins(18) = mankind, collective."
+Iblis,إبليس,<iboliys,11,11,11,0,0,0,0,11,0,0,,,,,,,,—,"Proper noun, no root."
+Iman,إيمان,<iyma`n,45,45,45,0,0,45,0,0,0,0,879,290,31,0,558,0,321,Amn,
+Kufr,كفر,kufor,37,41,37,0,0,37,0,0,0,0,525,200,21,0,304,0,221,kfr,"kuforaAn(1), kufuwr(3) = variant verbal nouns."
+Turab,تراب,turaAb,17,17,17,0,0,17,0,0,0,0,22,21,1,0,0,0,22,trb,
+Nutfa,نطفة,n~uTofap,12,12,12,0,0,12,0,0,0,0,12,12,0,0,0,0,12,nTf,
+Alaqa,علقة,Ealaqap,5,6,5,0,0,5,0,0,0,0,7,7,0,0,0,0,7,Elq,Ealaq(1) = 96:2 collective form.
+Mudgha,مضغة,muDogap,3,3,3,0,0,3,0,0,0,0,3,3,0,0,0,0,3,mDg,
+Izam,عظم,EaZom,2,15,2,0,0,2,0,0,0,0,128,20,105,0,3,0,125,EZm,CORRECTED: plural عظام (13x) is tagged LEM:EaZiym POS:N+MP — see 2.1. Was reported as 2.
+Lahm,لحم,laHom,12,12,11,0,1,12,0,0,0,0,12,12,0,0,0,0,12,lHm,
