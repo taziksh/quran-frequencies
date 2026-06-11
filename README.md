@@ -239,6 +239,14 @@ computed, no match; white = method not applicable. Regenerates from notebook 04.
 
 Observations the verdict column compresses:
 
+- **The symmetries are not jointly consistent.** No single counting rule makes the claims hold
+  *together*: the best-performing method ("singular, no pron suffix") recovers only 6 of 31,
+  and half of those are words with no plurals or suffixed forms, which hold under nearly any
+  method. Plain lemma counting recovers 4; root counting recovers a *different* 3. The
+  selections that rescue individual claims break others (the convention behind yawm = 365
+  makes angels/devils 83 vs 87; the root method behind nafʿ/fasād 50/50 makes dunya/akhira
+  133 vs 250) — visible in the matrix below as the absence of any solid vertical stripe.
+  Computation: notebook 04 §8.
 - **The most famous claims split.** 115/115, 88/88, 25/25 (Adam/Isa) and qul/qālū 332/332 hold
   cleanly; **ḥayāt/mawt 145/145 — equally famous — reproduces under nothing** (lemmas 76/50,
   roots 184/165); the "with derivatives" wording attached to it matches no derivative set in
