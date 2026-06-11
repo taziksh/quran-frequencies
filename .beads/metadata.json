@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "quran_frequencies",
+  "project_id": "5ed7d6f9-615b-4b93-9c28-b000ff45e784"
+}
