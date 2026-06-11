@@ -1,0 +1,21 @@
+# Verbatim excerpt of quranic-corpus-morphology-0.4.txt (Quranic Arabic Corpus,
+# (C) 2011 Kais Dukes, GNU GPL) for unit tests. 14 lines covering: prefixes,
+# suffixes, nouns, proper nouns, adjectives, demonstratives, verbs (perfect,
+# imperative, imperfect+jussive, form IV), participles, plural/dual flags, and
+# the bones-under-EaZiym tagging quirk.
+LOCATION	FORM	TAG	FEATURES
+(1:1:1:1)	bi	P	PREFIX|bi+
+(1:1:1:2)	somi	N	STEM|POS:N|LEM:{som|ROOT:smw|M|GEN
+(1:1:2:1)	{ll~ahi	PN	STEM|POS:PN|LEM:{ll~ah|ROOT:Alh|GEN
+(1:1:3:1)	{l	DET	PREFIX|Al+
+(1:1:3:2)	r~aHoma`ni	ADJ	STEM|POS:ADJ|LEM:r~aHoma`n|ROOT:rHm|MS|GEN
+(1:4:1:1)	ma`liki	N	STEM|POS:N|ACT|PCPL|LEM:ma`lik|ROOT:mlk|M|GEN
+(1:7:6:2)	magoDuwbi	N	STEM|POS:N|PASS|PCPL|LEM:magoDuwb|ROOT:gDb|M|GEN
+(2:5:1:1)	>uw@la`^}ika	DEM	STEM|POS:DEM|LEM:>uwla`^}ik|P
+(2:6:9:1)	tun*iro	V	STEM|POS:V|IMPF|(IV)|LEM:>an*ara|ROOT:n*r|2MS|MOOD:JUS
+(2:14:10:1)	$aya`Tiyni	N	STEM|POS:N|LEM:$ayoTa`n|ROOT:$Tn|MP|GEN
+(2:14:10:2)	himo	PRON	SUFFIX|PRON:3MP
+(2:30:2:1)	qaAla	V	STEM|POS:V|PERF|LEM:qaAla|ROOT:qwl|3MS
+(2:58:14:2)	quwlu	V	STEM|POS:V|IMPV|LEM:qaAla|ROOT:qwl|2MP
+(19:14:2:2)	wa`lidayo	N	STEM|POS:N|LEM:wa`liday|ROOT:wld|MD|GEN
+(23:14:10:1)	EiZa`mFA	N	STEM|POS:N|LEM:EaZiym|ROOT:EZm|MP|INDEF|ACC
