@@ -1,5 +1,5 @@
-Token-level validation: occurrences.csv vs JQuranTree (Tanzil Uthmani text)
-locations checked : 3960
-letter-skeleton match : 3960
+Token-level validation: occurrences.csv + claims_occurrences.csv vs JQuranTree (Tanzil Uthmani text)
+locations checked : 7806
+letter-skeleton match : 7806
 mismatches : 0
 missing tokens : 0

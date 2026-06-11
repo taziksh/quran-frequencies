@@ -4,6 +4,7 @@ output/*
 !output/full_counts.csv
 !output/claims_audit.csv
 !output/claims_audit_grid.csv
+!output/claims_occurrences.csv
 !output/claims_audit_matrix.png
 !output/occurrences.csv
 !output/pairs_table.png

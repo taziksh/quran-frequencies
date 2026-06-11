@@ -35,7 +35,8 @@ import pandas as pd
 from src.buckwalter import bw_to_arabic
 
 RAW = REPO / "data" / "quranic-corpus-morphology-0.4.txt"
-OCC = REPO / "output" / "occurrences.csv"
+# every location counted anywhere: the 38-word index + the claims-audit index (notebook 04)
+OCC_FILES = [REPO / "output" / "occurrences.csv", REPO / "output" / "claims_occurrences.csv"]
 LOCATIONS_CSV = Path("/tmp/qf_locations.csv")
 TOKENS_CSV = Path("/tmp/qf_tokens.csv")
 REPORT = REPO / "validation" / "token_validation_report.txt"
@@ -70,8 +71,10 @@ def load_tokens_from_morphology() -> dict[tuple[int, int, int], str]:
 
 
 def locations_under_test() -> list[tuple[int, int, int]]:
-    occ = pd.read_csv(OCC)
-    locs = {(int(c), int(v), int(w)) for c, v, w in (loc.split(":") for loc in occ["location"])}
+    locs: set[tuple[int, int, int]] = set()
+    for path in OCC_FILES:
+        occ = pd.read_csv(path)
+        locs |= {(int(c), int(v), int(w)) for c, v, w in (loc.split(":") for loc in occ["location"])}
     return sorted(locs)
 
 
@@ -107,7 +110,7 @@ def compare() -> None:
             mismatches.append((loc, expected, actual))
 
     lines = [
-        "Token-level validation: occurrences.csv vs JQuranTree (Tanzil Uthmani text)",
+        "Token-level validation: occurrences.csv + claims_occurrences.csv vs JQuranTree (Tanzil Uthmani text)",
         f"locations checked : {len(locs)}",
         f"letter-skeleton match : {matches}",
         f"mismatches : {len(mismatches)}",

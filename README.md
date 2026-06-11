@@ -6,8 +6,9 @@ v0.4 [1]. Every word is counted by several uniform methods side by side — by l
 part of speech, by grammatical number — rather than by a single cherry-picked figure. The
 results are validated three independent ways: against the raw annotation file, against the
 corpus maintainers' current revision [2], and token-by-token against the canonical Uthmani text
-[3] through the JQuranTree API [4]. All 3,960 counted occurrences are indexed by
-chapter:verse:word so that any number in this document can be checked by hand. On top of the
+[3] through the JQuranTree API [4]. Every counted occurrence (7,806 unique locations across
+the word counts and the claims audit) is indexed by chapter:verse:word so that any number in
+this document can be checked by hand. On top of the
 counts, [§5](#5-claims-audit) audits 31 popular numerical claims about the Quran — Nawfal's
 word pairs, "yawm = 365", "sea : land = 71% : 29%" — each evaluated against every counting
 method, with an explicit verdict and the exact selection behind every reproducing number.
@@ -161,18 +162,22 @@ Three independent layers, strongest last:
    asserts every claims-audit verdict and its key counts; the
    occurrence index is asserted to tie out with the count grid for all 38 words. The unit and
    integration test suite (`tests/`, 34 tests) pins the same invariants for CI-style checking.
-2. **Upstream revision.** Every root used by the 38 words (35 roots) was compared against the
-   corpus maintainers' dictionary pages [2] — every root total and every per-lemma count
-   matched exactly (~140 numbers). Notebook 03 §9 records the comparison.
-3. **Canonical text.** All 3,960 counted occurrences were verified against the Tanzil Uthmani
-   text [3] via JQuranTree [4]: for each chapter:verse:word location, the token reconstructed
-   from the morphology file (prefixes + stem + suffixes) was compared, letter for letter, with
-   the token at that location in the canonical text. Result: **3,960/3,960 match, 0 mismatches,
-   0 missing** (`validation/token_validation_report.txt`; scripts in `validation/`).
+2. **Upstream revision.** Every root used by the 38 words (35 roots) and every additional root
+   used by the claims audit (22 roots) was compared against the corpus maintainers' dictionary
+   pages [2] — every root total and every per-lemma count matched exactly (~260 numbers).
+   Notebook 03 §9 and notebook 04 §10 record the comparisons.
+3. **Canonical text.** Every counted occurrence — the 3,960 occurrences of the 38 words plus
+   everything any claims-audit method counts (7,806 unique locations in total) — was verified
+   against the Tanzil Uthmani text [3] via JQuranTree [4]: for each chapter:verse:word
+   location, the token reconstructed from the morphology file (prefixes + stem + suffixes) was
+   compared, letter for letter, with the token at that location in the canonical text. Result:
+   **7,806/7,806 match, 0 mismatches, 0 missing**
+   (`validation/token_validation_report.txt`; scripts in `validation/`).
 
 To verify any single number yourself: filter [`output/occurrences.csv`](output/occurrences.csv)
-to the word — every counted occurrence is listed with its location, surface form, lemma, POS,
-and number — and look the locations up in any Quran text or at corpus.quran.com.
+(the 38 words) or [`output/claims_occurrences.csv`](output/claims_occurrences.csv) (the claims
+audit) to the word — every counted occurrence is listed with its location, surface form,
+lemma, POS, and number — and look the locations up in any Quran text or at corpus.quran.com.
 
 ## 5. Claims audit
 
@@ -268,9 +273,11 @@ Observations the verdict column compresses:
 - **Counts are not inferences.** Where a count reproduces, any claim built on top of it
   (= days of the year, = number of surahs, = Earth's water ratio, = chromosome count) is a
   separate, non-arithmetic assertion that a frequency table can neither confirm nor refute.
-- **Validation scope:** claim words outside the 38-word set (nafʿ, fasād, lisān, …) are counted
-  with the same parser and frozen corpus snapshot, but have not been token-validated against
-  the Uthmani text the way the 38 words were (§4).
+- **Validation scope:** claim words outside the 38-word set (nafʿ, fasād, lisān, …) receive
+  the same validation as the 38: every location any audit method counts is token-validated
+  against the Uthmani text, and all 22 additional roots match the corpus website's current
+  revision exactly (§4; notebook 04 §§9–10;
+  [`output/claims_occurrences.csv`](output/claims_occurrences.csv)).
 
 ## 6. Limitations and interpretive notes
 
@@ -340,6 +347,7 @@ uv run --extra dev pytest      # run the test suite (34 tests)
 | `notebooks/04_claims_audit.ipynb` | **Claims audit** (§5): claims registry with sources, every claim under every method, verdicts, per-claim forensics |
 | `output/full_counts.csv` | The complete method grid, one row per word |
 | `output/occurrences.csv` | Every counted occurrence with chapter:verse:word location |
+| `output/claims_occurrences.csv` | Same, for every location any claims-audit method counts |
 | `output/claims_audit.csv` | One row per claim: claimed numbers, verdict, methods it reproduces under, sources, notes |
 | `output/claims_audit_grid.csv` | Every claim × every method × both sides, with match flags |
 | `output/pairs_bars.png`, `output/pairs_table.png` | Charts (regenerated by notebook 03) |
