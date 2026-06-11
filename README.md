@@ -12,28 +12,30 @@ Count occurrences of Arabic words in the Quran using the **Quranic Arabic Corpus
 - Website: https://corpus.quran.com
 - Download: https://corpus.quran.com/download/
 - File: `quranic-corpus-morphology-0.4.txt` (tab-separated)
-- License: see corpus website for terms
 
 The morphology file provides a full grammatical analysis of every word in the Quran — part of speech, lemma, root, person/gender/number, case, and more — in Buckwalter transliteration.
+
+The **unmodified data file is committed** at `data/quranic-corpus-morphology-0.4.txt`, so a
+fresh clone works out of the box. Its license permits distributing verbatim copies with the
+copyright block intact (annotations: © 2011 Kais Dukes, GNU GPL, [Quranic Arabic
+Corpus](https://corpus.quran.com); underlying text: © Tanzil.info, CC BY-ND 3.0,
+[Tanzil project](http://tanzil.net)). Do not edit the file; to update or re-obtain it, use the
+corpus download page above.
 
 ## Setup
 
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-# Clone and install
 git clone <this-repo>
 cd quran-frequencies
 uv sync
 
-# Download data
-# 1. Go to https://corpus.quran.com/download/
-# 2. Download quranic-corpus-morphology-0.4.zip
-# 3. Unzip into data/
-unzip ~/Downloads/quranic-corpus-morphology-0.4.zip -d data/
-
-# Run notebooks
+# Run notebooks (data is included in the repo)
 uv run jupyter notebook
+
+# Run tests
+uv run --extra dev pytest
 ```
 
 ## Project Structure

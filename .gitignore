@@ -1,4 +1,3 @@
-data/*.txt
 *.zip
 # generated outputs are ignored except the cited verification artifacts
 output/*
