@@ -53,6 +53,10 @@ quran-frequencies/
     occurrences.csv         # Every counted occurrence with chapter:verse:word location
     pairs_table.png         # Regenerated pairs chart (reproducible from notebook 03)
     *.png (legacy)          # Older charts, committed without generating code
+  validation/
+    validate_locations.py   # Token-level check of every occurrence vs canonical text
+    DumpTokens.java         # JQuranTree token dumper used by the script
+    token_validation_report.txt
 ```
 
 ## How It Works
@@ -232,7 +236,18 @@ To verify any count:
 3. The notebooks show every intermediate step — lemma discovery, validation, counting —
    and notebook 03 re-derives everything with asserts tying the grid to the audit
 
-All Buckwalter strings were discovered from the data (not hardcoded from external sources) and validated by converting back to Arabic. Spot checks against the corpus website (roots `mlk`, `Axr`, `EZm`, `ywm`; 2026-06-11) matched on every compared number.
+All Buckwalter strings were discovered from the data (not hardcoded from external sources) and validated by converting back to Arabic.
+
+### Validation status (2026-06-11)
+
+- **corpus.quran.com**: every root used by the 38 words was fetched and compared — all root
+  totals and per-lemma counts matched exactly (~140 numbers across 35 roots).
+- **Token level (JQuranTree)**: all **3,960** counted occurrences were checked against the
+  canonical Tanzil Uthmani text via [JQuranTree](https://github.com/dsog/jqurantree), the Java
+  API named in TASK.txt — every location holds a real token whose letters match the morphology
+  file's reconstruction (0 mismatches, 0 missing). See `validation/` for the runnable scripts
+  and `validation/token_validation_report.txt` for the report; full details in notebook 03,
+  section 9.
 
 ### Tooling note
 
