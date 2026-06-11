@@ -1,302 +1,318 @@
-# Quran Word Frequency Counter
+# Quran Word Frequency Counts
 
-How often does each of 38 chosen words (life, death, angel, satan, this-world, hereafter, …)
-appear in the Quran? This project answers that **rigorously**: counts are derived from the
-**Quranic Arabic Corpus morphology v0.4** (a linguistically tagged dataset of every word in the
-Quran), computed by several uniform methods rather than one cherry-picked number, and verified
-externally down to individual verse locations.
+**A verified frequency count of 38 selected words in the Quran** (life, death, angel, satan,
+this-world, hereafter, …), derived from the Quranic Arabic Corpus morphological annotation,
+v0.4 [1]. Every word is counted by several uniform methods side by side — by lemma, by root, by
+part of speech, by grammatical number — rather than by a single cherry-picked figure. The
+results are validated three independent ways: against the raw annotation file, against the
+corpus maintainers' current revision [2], and token-by-token against the canonical Uthmani text
+[3] through the JQuranTree API [4]. All 3,960 counted occurrences are indexed by
+chapter:verse:word so that any number in this document can be checked by hand.
 
-> **Audited 2026-06-11.** All counts were re-derived from scratch, cross-validated against
-> corpus.quran.com (~140 numbers, all exact) and against the canonical Quran text via JQuranTree
-> (all 3,960 counted occurrences). Several previously published numbers were corrected — see
-> "Audit corrections" below.
+*Counts computed and audited 2026-06-11 from corpus morphology v0.4 (frozen snapshot, committed
+in `data/`). An earlier iteration of this project published several incorrect figures; the audit
+that found and fixed them is documented in [Findings](#2-audit-findings-and-corrections) and
+reproduced in `notebooks/03_audit_and_full_recount.ipynb`.*
 
-## Results at a glance
+---
 
-Lemma counts (the word in all its grammatical forms — see "Counting Methods" for the other views):
+## 1. Results
+
+Lemma counts — the word in all its grammatical forms (singular, dual, plural, all cases).
+Other counting methods are defined in [Methods](#3-methods) and reported for every word in
+[`output/full_counts.csv`](output/full_counts.csv).
 
 | Pair | A | B | Worth knowing |
 |---|--:|--:|---|
-| Dunya / Akhira | **115** | **115** | exact match; Akhira = feminine "hereafter" only |
-| Malak / Shaytan | **88** | **88** | exact match; both include their plurals |
+| Dunya / Akhira | **115** | **115** | exact match; Akhira = feminine "hereafter" only (§2.2) |
+| Malak / Shaytan | **88** | **88** | exact match; both lemmas include their plurals |
 | Adam / Isa | **25** | **25** | exact match |
-| Hayat / Mawt | 76 | 50 | with variant nouns: 79 / 56 |
+| Hayat / Mawt | 76 | 50 | with variant nouns: 79 / 56 (§2.4) |
 | Rajul / Imra'a | 29 | 26 | with (suppletive) plurals: 57 / 85 |
-| Jannah / Jahannam | 147 | 77 | Jannah includes جنات (71 pl) |
+| Jannah / Jahannam | 147 | 77 | Jannah includes جنات (71 plural) |
 | Hasana / Sayyi'a | 28 | 22 | with -āt plurals: 31 / 58 |
 | Iman / Kufr | 45 | 37 | Kufr with variant nouns: 41 |
 | Rahma / Adhab | 114 | 322 | Rahma = number of surahs |
 | Ghani / Faqir | 24 | 12 | exact 2:1 |
-| Bahr / Barr | 41 | 22 | Barr = land 12 + righteous/dutiful 10 |
+| Bahr / Barr | 41 | 22 | Barr = land 12 + righteous/dutiful 10 (§2.3) |
 | Harr / Bard | 3 | 2 | with variants: 4 / 4 |
-| Zakat / Baraka | 32 | 3 | Baraka with "blessed": 15 |
+| Zakat / Baraka | 32 | 3 | Baraka with "blessed" (mubārak): 15 |
 | Insan / Iblis | 71 | 11 | Insan + ins (collective): 89 |
 | Shahr / Yawm | 21 | 405 | singular-only: **12** / **375** |
 
-Standalone: **Qaala** (said) 1,618 — of which the imperative *qul* is 332; embryology chain
-turab 17 → nutfa 12 → alaqa 6 → mudgha 3 → **izam 15** → lahm 12.
+Standalone words: **Qaala** (said) 1,618 verb occurrences — 1,004 perfect, 265 imperfect, 349
+imperative, of which *qul* ("say!", 2nd masculine singular) is 332. Embryology sequence:
+turab (dust) 17 → nutfa (drop) 12 → alaqa (clot) 6 → mudgha (lump) 3 → izam (bones) 15 →
+lahm (flesh) 12.
 
-Honest notes: yawm singular is **375**, not the folkloric 365 (yawma'idhin, 68×, is a separate
-word); shahr singular is 12; the izam count is 15 only once you know the corpus hides the plural
-عظام under another lemma (see Audit corrections).
+Two results that contradict popular claims, stated plainly:
 
-![Pairs chart](output/pairs_table.png)
+- **Yawm (day) singular is 375, not 365.** The widely circulated "365 days" figure does not
+  hold at the lemma level in this corpus (405 total = 375 singular + 27 plural + 3 dual);
+  yawma'idhin ("that day", 68×) is a separate lemma and is not part of the 405.
+- **Shahr (month) singular is 12**, which does match the popular claim.
 
-Full grid for all 38 words: [`output/full_counts.csv`](output/full_counts.csv) — every counted
-occurrence with its verse location: [`output/occurrences.csv`](output/occurrences.csv).
+![Pairs chart](output/pairs_bars.png)
 
-## Data Source
+(Variant of this chart as a table: [`output/pairs_table.png`](output/pairs_table.png). Both
+regenerate from notebook 03.)
 
-**Quranic Arabic Corpus** (v0.4, 77,915 STEM entries)
-- Website: https://corpus.quran.com
-- Download: https://corpus.quran.com/download/
-- File: `quranic-corpus-morphology-0.4.txt` (tab-separated)
+## 2. Audit findings and corrections
 
-The morphology file provides a full grammatical analysis of every word in the Quran — part of speech, lemma, root, person/gender/number, case, and more — in Buckwalter transliteration.
+A from-scratch audit (2026-06-11) found that earlier published figures from this project
+contained errors. Each finding below is shown with full supporting evidence in notebook 03,
+section 2, and was confirmed against the corpus website [2].
 
-The **unmodified data file is committed** at `data/quranic-corpus-morphology-0.4.txt`, so a
-fresh clone works out of the box. Its license permits distributing verbatim copies with the
-copyright block intact (annotations: © 2011 Kais Dukes, GNU GPL, [Quranic Arabic
-Corpus](https://corpus.quran.com); underlying text: © Tanzil.info, CC BY-ND 3.0,
-[Tanzil project](http://tanzil.net)). Do not edit the file; to update or re-obtain it, use the
-corpus download page above.
+### 2.1 Izam (bones): 2 → 15
 
-## Setup
+The corpus tags the plural عظام (ʿiẓām, "bones") under the lemma `EaZiym` — the same lemma as
+عظيم "great/mighty" — distinguishable only as noun entries with plural marking (`POS:N` + `MP`),
+13 occurrences including the embryology verse 23:14 (twice). Counting the bone lemma `EaZom`
+alone gives 2 and silently misses all of them. The corpus website keeps the same filing and
+glosses those entries "[the bones]" (e.g. 2:259:51, 23:14:10, 75:3:5), so this is an upstream
+annotation decision, not a parsing artifact; any bones count must use the selector
+`(lemma=EaZiym, POS=N, NUMBER=P)`.
 
-Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
+### 2.2 Akhira: masculine remainder is 40, not 30
+
+Lemma `A^xir` totals 155 (not 145 as previously claimed): 115 feminine آخرة "the hereafter"
++ 40 masculine آخِر "last/latter" — two genuinely different words sharing one lemma, separated
+by a gender filter. The separate lemma `A^xar` (آخَر "another", 70×) is not involved.
+
+### 2.3 Barr: land 12 + righteous/dutiful 10 (was "13 + 9")
+
+Form-level split of the 22 occurrences of lemma `bar~`: genitive `bar~i` ×12, all in "in the
+land" contexts; 52:28 is the divine name *al-Barr*; 19:14 and 19:32 are "dutiful (to parents)";
+أبرار ×6 and بررة ×1 are "the righteous". Every row is listed in notebook 03 §2.3.
+
+### 2.4 Hayat/Mawt variant asymmetry
+
+Mawt had been credited the variant nouns `mawotat` (3) + `mamaAt` (3) → 56 while Hayat received
+nothing. Its exact counterparts — `m~aHoyaA` (2; 6:162 pairs مَحْيَا with مَمَات in a single
+verse) and `HayawaAn` (1; 29:64 "the true life") — are now included symmetrically → 79.
+
+### 2.5 Word count
+
+The task list contains 38 words; earlier documentation said 37.
+
+## 3. Methods
+
+### 3.1 Counting unit
+
+The corpus represents each word of the Quran as one or more *segments* (prefix, stem, suffix).
+We count **STEM segments only** (77,915 in total): the definite article, attached pronouns, and
+case endings are not words. The full annotation format and the Buckwalter transliteration used
+throughout are described in the [Appendix](#appendix-corpus-format-and-transliteration).
+
+### 3.2 Linguistic definitions
+
+- **Lemma** (`LEM`) — the dictionary headword. The corpus files regular plurals, duals, and many
+  broken plurals under the singular's lemma (e.g. أيام "days" under `yawom`), so a lemma count
+  is "the word in all its grammatical forms".
+- **Root** (`ROOT`) — the (usually three-consonant) derivational skeleton shared by related
+  words (k-t-b → kitāb "book", kātib "writer", maktaba "library"). Proper nouns generally have
+  no root in the corpus.
+- **Broken / suppletive plurals** — irregular plurals stored under their *own* lemma
+  (rajul "man" → rijāl "men"; imraʾa "woman" → nisāʾ "women", a different root entirely). These
+  are standard Arabic morphology and are handled as explicit variants, listed per word.
+- **PGN** — person-gender-number tags (e.g. `3MS`, `MP`); the trailing S/D/P gives grammatical
+  number, with unmarked number read as singular (Arabic leaves singular implicit).
+
+### 3.3 Counting methods
+
+Applied uniformly to every word — no cherry-picking:
+
+| Method | What it counts |
+|---|---|
+| **Lemma** | Exact lemma match, all grammatical forms |
+| **Lemma + variants** | Plus declared variant selectors (irregular plurals / variant nouns under other lemmas) |
+| **Singular only** | Lemma match, excluding dual and plural |
+| **Root, nominal** | All nouns, adjectives, proper nouns, time adverbs sharing the root |
+| **Root, by POS** | Root totals split by noun / adjective / proper noun / verb / time adverb |
+| **By number** | Lemma split into singular / dual / plural |
+
+A variant selector is either a plain lemma (`rijaAl` for `rajul`) or a `(lemma, POS, NUMBER)`
+triple where only a slice of another lemma belongs to the word — required exactly once, for the
+bones plural (§2.1). One gender filter exists (Akhira, §2.2); no other word needs one (verified
+against all candidate lemmas).
+
+All methods, plus per-root listings of every derived lemma and the Qaala verb-form breakdown,
+are computed in notebook 03 and exported to `output/full_counts.csv`.
+
+### 3.4 Tooling
+
+The annotation file is a documented TSV; it is parsed directly with pandas (`src/parser.py`),
+which is standard practice for this dataset. Alternatives were evaluated: JQuranTree [4] (Java;
+used here for validation, not counting), QuranTree.jl [5] (Julia), and the `qurancorpus` pip
+package [6] (abandoned; reads only the obsolete v0.1 XML format). The parser is verified line
+by line against the raw file and by the validation layers below.
+
+## 4. Validation
+
+Three independent layers, strongest last:
+
+1. **Internal.** The parser's STEM count is asserted against an independent scan of the raw
+   file (77,915). Sixteen sanity asserts pin the audited values in notebook 03; the
+   occurrence index is asserted to tie out with the count grid for all 38 words. The unit and
+   integration test suite (`tests/`, 21 tests) pins the same invariants for CI-style checking.
+2. **Upstream revision.** Every root used by the 38 words (35 roots) was compared against the
+   corpus maintainers' dictionary pages [2] — every root total and every per-lemma count
+   matched exactly (~140 numbers). Notebook 03 §9 records the comparison.
+3. **Canonical text.** All 3,960 counted occurrences were verified against the Tanzil Uthmani
+   text [3] via JQuranTree [4]: for each chapter:verse:word location, the token reconstructed
+   from the morphology file (prefixes + stem + suffixes) was compared, letter for letter, with
+   the token at that location in the canonical text. Result: **3,960/3,960 match, 0 mismatches,
+   0 missing** (`validation/token_validation_report.txt`; scripts in `validation/`).
+
+To verify any single number yourself: filter [`output/occurrences.csv`](output/occurrences.csv)
+to the word — every counted occurrence is listed with its location, surface form, lemma, POS,
+and number — and look the locations up in any Quran text or at corpus.quran.com.
+
+## 5. Limitations and interpretive notes
+
+- **Counts inherit the corpus's annotation decisions.** Where those decisions are surprising
+  (bones under `EaZiym`, the Akhira lemma conflation, niswa under `nisaA^'`), this project
+  documents and works around them explicitly rather than silently (§2; notebook 03).
+- **Lemma counts include plurals and duals** unless the singular-only column is used; words
+  differ in how much of their count is plural (e.g. 83% of malak's 88 is ملائكة).
+- **Semantic splits are form-based, not interpretive.** The Barr land/righteous split (§2.3)
+  follows surface form and morphology, with every row shown; no occurrence was classified by
+  theological judgment.
+- **v0.4 is a frozen snapshot** (2011). The corpus website continues to receive corrections;
+  as of 2026-06-11 every compared number agreed, but future revisions could diverge.
+- Word selection (the 38 words and the 15 pairings) follows the task specification
+  (`TASK.txt`), not a linguistic criterion.
+
+## 6. Prior and related work
+
+- **The classical counting tradition.** Word counts of the Quran long predate computers; the
+  standard reference is ʿAbd al-Bāqī's concordance [9], compiled by hand, which underlies most
+  published figures. This project is the same exercise done against a machine-readable,
+  morphologically tagged text, where every methodological choice is explicit and re-runnable.
+- **Popular "numerical balance" claims.** The word-pair genre (dunya/akhira, angels/devils,
+  life/death appearing equally often) was popularized by Nawfal [10] and circulates widely.
+  Some of those claims reproduce exactly at the lemma level here (115/115, 88/88, 25/25);
+  others do not under *any* method in the grid (life/death is 76–79 vs 50–56, not 145/145;
+  yawm singular is 375, not 365). This project neither set out to confirm nor refute the
+  genre — it reports what a tagged corpus yields under uniform rules.
+- **Computational resources.** The Quranic Arabic Corpus and its annotation methodology
+  [1, 8] are the foundation; Tanzil [3] provides the underlying verified text; JQuranTree [4],
+  QuranTree.jl [5], and python-qurancorpus [6] are the existing programmatic interfaces.
+  QuranMorph [11] is a recent independently produced morphological annotation of the Quran.
+- **Earlier iteration of this repository.** Notebooks 01/02 predate the audit; their published
+  figures contained the errors documented in §2 and have been corrected in place.
+
+## 7. Future work
+
+- **Full-vocabulary release** — extend the grid from the 38 selected words to every lemma and
+  root in the corpus, as a citable frequency table.
+- **Claims audit** — a systematic table of popular numerical claims, each evaluated against
+  every counting method, so that "holds / holds only under method X / does not hold" is
+  explicit per claim.
+- **Cross-resource comparison** — quantify divergences between corpus v0.4, the website's
+  current revision, QuranMorph [11], and ʿAbd al-Bāqī [9]; annotation differences like the
+  bones case (§2.1) suggest more such cases exist outside our 38 words.
+- **Semantic disambiguation** — the Barr land/righteous split (§2.3) is form-based; a
+  context- or tafsir-informed classification of polysemous lemmas would let counts be reported
+  per sense rather than per form.
+- **Continuous verification** — run the test suite and token-level validation automatically on
+  every change (CI), so the pinned numbers cannot drift silently.
+
+## 8. Reproducing
+
+Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/). The data file is committed (license
+permits verbatim copies — see [Data](#9-data-and-licensing)), so a fresh clone is self-contained:
 
 ```bash
-git clone <this-repo>
-cd quran-frequencies
+git clone <this-repo> && cd quran-frequencies
 uv sync
-
-# Run notebooks (data is included in the repo)
-uv run jupyter notebook
-
-# Run tests
-uv run --extra dev pytest
+uv run jupyter notebook        # run the notebooks
+uv run --extra dev pytest      # run the test suite (21 tests)
 ```
 
-## Project Structure
+| Path | Contents |
+|---|---|
+| `notebooks/01_explore_and_discover.ipynb` | Lemma discovery per word, validation against sample verses, the four-method count |
+| `notebooks/02_results_and_exploration.ipynb` | Pair tables, embryology sequence, open-ended exploration |
+| `notebooks/03_audit_and_full_recount.ipynb` | **Authoritative**: audit evidence, full method grid, root listings, Qaala breakdown, validation record, chart generation |
+| `output/full_counts.csv` | The complete method grid, one row per word |
+| `output/occurrences.csv` | Every counted occurrence with chapter:verse:word location |
+| `output/pairs_bars.png`, `output/pairs_table.png` | Charts (regenerated by notebook 03) |
+| `src/parser.py`, `src/buckwalter.py` | Morphology TSV parser; Buckwalter ↔ Arabic conversion |
+| `tests/` | Unit tests (16-line verbatim fixture) + integration tests (pinned audited counts) |
+| `validation/` | Token-level validation scripts (Python + Java) and report |
 
-```
-quran-frequencies/
-  data/                     # Morphology file v0.4 (verbatim copy, committed)
-  src/
-    parser.py               # Parse morphology TSV -> pandas DataFrame
-    buckwalter.py           # Buckwalter <-> Arabic Unicode conversion
-  tests/                    # Unit tests (fixture-based) + integration tests (pinned counts)
-  notebooks/
-    01_explore_and_discover.ipynb    # Discovery, validation, counting
-    02_results_and_exploration.ipynb # Results tables, open-ended exploration
-    03_audit_and_full_recount.ipynb  # Audit, full method grid, cross-validation
-  output/                   # All generated by notebook 03 — delete and re-run to reproduce
-    full_counts.csv         # The complete method grid, one row per word
-    occurrences.csv         # Every counted occurrence with chapter:verse:word location
-    pairs_table.png         # Pairs table chart
-    pairs_bars.png          # Pairs bar chart
-  validation/
-    validate_locations.py   # Token-level check of every occurrence vs canonical text
-    DumpTokens.java         # JQuranTree token dumper used by the script
-    token_validation_report.txt
-```
+Everything in `output/` regenerates by running notebook 03 top to bottom. The token validation
+is re-run with the commands in the docstring of `validation/validate_locations.py`.
 
-## How It Works
+## 9. Data and licensing
 
-### The Corpus Format
+The single data source is the **Quranic Arabic Corpus morphology file, v0.4** [1]
+(`data/quranic-corpus-morphology-0.4.txt`, 77,915 STEM entries among 128,219 segment records),
+which annotates every word of the Quran with part of speech, lemma, root, person/gender/number,
+case, mood, and more, in Buckwalter transliteration [7], on top of the Tanzil Uthmani text [3].
 
-Each line in the morphology file is a tab-separated record:
+The unmodified file is committed verbatim, as its terms permit (annotations: © 2011 Kais Dukes,
+GNU GPL; text: © Tanzil.info, CC BY-ND 3.0 — both require the copyright block, which is intact
+in the file, and attribution with links, given here and in [References](#references)). Do not
+edit the file; updates come from the corpus download page [1].
+
+Code in this repository (parser, notebooks, tests, validation scripts) is the author's own.
+
+## References
+
+1. Dukes, K. (2011). *Quranic Arabic Corpus: morphology annotation, version 0.4.* University of
+   Leeds. https://corpus.quran.com — download: https://corpus.quran.com/download/
+2. *Quranic Arabic Corpus — Quran Dictionary* (current revision; root pages, e.g.
+   https://corpus.quran.com/qurandictionary.jsp?q=mlk). Accessed 2026-06-11.
+3. Tanzil Project (2009). *Tanzil Quran Text (Uthmani, version 1.0.2).* http://tanzil.net
+4. Dukes, K. *JQuranTree: Java API for the Quranic Arabic Corpus.*
+   https://corpus.quran.com/java/ — source: https://github.com/dsog/jqurantree
+5. Asaad, A.-A. (2021). "QuranTree.jl: A Julia Package for Quranic Arabic Corpus." *Proceedings
+   of the Sixth Arabic Natural Language Processing Workshop (WANLP 2021).*
+   https://aclanthology.org/2021.wanlp-1.22/
+6. Chelli, A. *python-qurancorpus.* https://github.com/assem-ch/python-qurancorpus
+7. Buckwalter, T. (2002). *Buckwalter Arabic Morphological Analyzer, version 1.0.* Linguistic
+   Data Consortium. Transliteration scheme overview:
+   https://en.wikipedia.org/wiki/Buckwalter_transliteration
+8. Dukes, K., & Habash, N. (2010). "Morphological Annotation of Quranic Arabic." *Proceedings
+   of LREC 2010.* — the paper describing the corpus annotation methodology.
+9. ʿAbd al-Bāqī, M. F. (1945). *al-Muʿjam al-Mufahras li-Alfāẓ al-Qurʾān al-Karīm* (Concordance
+   of the Words of the Noble Quran). Cairo. — the standard hand-compiled concordance.
+10. Nawfal, ʿA. al-R. *al-Iʿjāz al-ʿAdadī lil-Qurʾān al-Karīm* (The Numerical Miracle of the
+    Quran). — the work that popularized the word-pair balance claims.
+11. Akra, D., Hammouda, T., & Jarrar, M. (2025). "QuranMorph: Morphologically Annotated Quranic
+    Corpus." arXiv:2506.18148. https://arxiv.org/abs/2506.18148
+
+## Appendix: corpus format and transliteration
+
+Each line of the morphology file is a tab-separated record; a word may span several segments:
 
 ```
 LOCATION    FORM    TAG    FEATURES
-(1:1:1:1)   bsm     P      PREFIX|bi+
-(1:1:1:2)   {sm     N      STEM|POS:N|LEM:{som|ROOT:smw|GEN
+(1:1:1:1)   bi      P      PREFIX|bi+
+(1:1:1:2)   somi    N      STEM|POS:N|LEM:{som|ROOT:smw|M|GEN
+(1:1:2:1)   {ll~ahi PN     STEM|POS:PN|LEM:{ll~ah|ROOT:Alh|GEN
 ```
 
-- **LOCATION**: `(chapter:verse:word:segment)` — a word can have multiple segments (prefix, stem, suffix)
-- **FORM**: The surface form in Buckwalter transliteration
-- **FEATURES**: Pipe-separated morphological tags
+- **LOCATION** — `(chapter:verse:word:segment)`
+- **FORM** — surface form in Buckwalter transliteration
+- **FEATURES** — pipe-separated tags: segment type (`STEM`/`PREFIX`/`SUFFIX`), `POS:`, `LEM:`,
+  `ROOT:`, aspect (`PERF`/`IMPF`/`IMPV`), voice, verb form (`(II)`…`(XII)`), case, state,
+  person-gender-number flags, `MOOD:`, etc. `src/parser.py` maps these to typed columns.
 
-We only use **STEM** entries (77,915 of them). Prefixes and suffixes are ignored for counting purposes.
+Buckwalter transliteration is a one-ASCII-character-per-letter encoding of Arabic [7]. The
+consonant map (vowels/diacritics omitted here; full map in `src/buckwalter.py`):
 
-### Buckwalter Transliteration
+| BW | Arabic | | BW | Arabic | | BW | Arabic | | BW | Arabic |
+|----|----|----|----|----|----|----|----|----|----|----|
+| A | ا | | x | خ | | T | ط | | l | ل |
+| b | ب | | d | د | | Z | ظ | | m | م |
+| t | ت | | * | ذ | | E | ع | | n | ن |
+| v | ث | | r | ر | | g | غ | | h | ه |
+| j | ج | | z | ز | | f | ف | | w | و |
+| H | ح | | s | س | | q | ق | | y | ي |
+| $ | ش | | S | ص | | D | ض | | k | ك |
 
-The corpus uses [Buckwalter transliteration](https://en.wikipedia.org/wiki/Buckwalter_transliteration) — an ASCII encoding of Arabic script. Every Arabic letter maps to one ASCII character:
-
-| Arabic | BW | Name |
-|--------|-----|------|
-| ا | A | alif |
-| ب | b | ba |
-| ت | t | ta |
-| ث | v | tha |
-| ج | j | jim |
-| ح | H | ha |
-| خ | x | kha |
-| د | d | dal |
-| ذ | * | dhal |
-| ر | r | ra |
-| ز | z | zayn |
-| س | s | sin |
-| ش | $ | shin |
-| ص | S | sad |
-| ض | D | dad |
-| ط | T | ta (emphatic) |
-| ظ | Z | za (emphatic) |
-| ع | E | ayn |
-| غ | g | ghayn |
-| ف | f | fa |
-| ق | q | qaf |
-| ك | k | kaf |
-| ل | l | lam |
-| م | m | mim |
-| ن | n | nun |
-| ه | h | ha |
-| و | w | waw |
-| ي | y | ya |
-
-`src/buckwalter.py` handles conversion between the two.
-
-### Key Morphological Concepts
-
-**Root** (`ROOT`): The 3-letter (trilateral) consonantal skeleton that Arabic words derive from. Example: root `k-t-b` (ك-ت-ب) gives rise to kitaab (book), kaatib (writer), maktaba (library), etc. Most words in Arabic share a root with semantically related words. Proper nouns typically have no root in the corpus.
-
-**Lemma** (`LEM`): The dictionary headword form. Multiple surface forms (singular, dual, plural, different cases) map to the same lemma. Example: the lemma `yawom` (يوم, day) covers both yawm (singular) and ayyaam (plural). This is our primary counting unit.
-
-**Part of Speech** (`POS`): The word's grammatical category:
-- `N` = noun, `V` = verb, `ADJ` = adjective, `PN` = proper noun
-- `T` = time adverb (e.g. yawm when used adverbially)
-- `P` = preposition, `CONJ` = conjunction, etc.
-
-**Person-Gender-Number** (`PGN`): Encodes grammatical person (1st/2nd/3rd), gender (M/F), and number (S=singular, D=dual, P=plural). Example: `3MS` = third person masculine singular. Used for:
-- Number extraction: the final character (S/D/P) tells us singular vs plural
-- Gender disambiguation: the Akhira lemma uses gender to separate "hereafter" (F) from "last" (M)
-
-**Broken Plurals**: Arabic has irregular plurals that don't follow predictable patterns — e.g. rajul (man) → rijaal (men), kitaab (book) → kutub (books). Sometimes the plural has a different lemma in the corpus, so we track these separately.
-
-**Suppletive Plurals**: Some words use an entirely different root for their plural — e.g. imra'a (woman, root: m-r-') → nisaa' (women, root: n-s-w). This is standard Arabic morphology, not an anomaly.
-
-## Counting Methods
-
-We apply **four counting methods uniformly** to every word in notebooks 01/02. No cherry-picking — every word gets all four counts. Notebook 03 extends this to the full grid TASK.txt asks for (per-POS, per-number, root-by-POS including verbs).
-
-| Method | What it counts | Use case |
-|--------|---------------|----------|
-| **Lemma** | Exact lemma match, all grammatical forms (sg/dual/pl, all cases) | Primary count |
-| **Lemma+Variants** | Same as Lemma, plus irregular-plural / variant-noun selectors stored under other lemmas | More inclusive count for words with irregular plurals |
-| **SingularOnly** | Lemma match, excluding dual (D) and plural (P) forms | For comparing "the concept" without plural inflections |
-| **RootNominal** | All nouns + adjectives + proper nouns + time adverbs sharing the root | Broader semantic field count |
-
-A variant selector is either a plain lemma (e.g. `rijaAl` for `rajul`) or a `(lemma, POS, NUMBER)`
-tuple when only a slice of another lemma belongs to the word — required for Izam, whose plural
-عظام is tagged under `LEM:EaZiym` as `POS:N` + `MP` (see Audit corrections).
-
-### Gender Filter (Akhira only)
-
-One word — Akhira (the hereafter) — requires a gender filter. Its lemma `A^xir` (آخر), 155 occurrences total, conflates two genuinely different words:
-
-- **Feminine** `A^xirap` (آخرة) = "the hereafter" — 115 occurrences
-- **Masculine** `A^xir` (آخر) = "last/latter" — 40 occurrences
-
-These are semantically distinct words that happen to share a lemma in the corpus. We filter by PGN containing "F" to isolate the hereafter meaning. This is the **only** word in our list that needs this treatment — verified by checking all other lemmas.
-
-### What We Include and Exclude
-
-- We count **STEM entries only** — prefixes (like the definite article al-) and suffixes (case markers, pronouns) are not separate word counts
-- For root-nominal counts, we include POS types N, ADJ, PN, and T (time adverbs) — we exclude verbs (V) and particles (notebook 03 also reports root totals including verbs, and per-POS)
-- Variant selectors are listed explicitly per word rather than discovered automatically
-- Proper nouns with no root (Adam, Isa, Iblis, Jahannam) get `—` for root-nominal count
-
-### Audit corrections (2026-06-11)
-
-Re-derived from scratch in `notebooks/03_audit_and_full_recount.ipynb`; previously published numbers that were wrong:
-
-- **Izam (bones): 2 → 15.** The corpus tags the plural عظام under `LEM:EaZiym` (the "great"
-  lemma) as `POS:N` + `MP` — 13 occurrences, including the embryology verse 23:14 (twice).
-  Counting `LEM:EaZom` alone misses all of them. The corpus website keeps the same filing and
-  glosses those entries "[the bones]", so this is an upstream annotation decision that any
-  bones count must work around.
-- **Akhira masculine: 30 → 40** (lemma total is 155, not 145).
-- **Barr split: "land 13 + righteous 9" → land 12 + righteous/dutiful 10.** Form-level:
-  `bar~i` ×12 (all "in the land"), plus 52:28 divine name *al-Barr*, 19:14/19:32 "dutiful",
-  أبرار ×6 and بررة ×1 (righteous).
-- **Hayat/Mawt variant symmetry.** Mawt had been credited `mawotat`+`mamaAt` (→56) while Hayat
-  got nothing; its exact counterparts `m~aHoyaA` (2) + `HayawaAn` (1) → 79 are now included
-  (6:162 pairs مَحْيَا with مَمَات in one verse).
-- **38 target words, not 37.**
-
-### Data Notes
-
-These are not uncertainties — just things worth knowing:
-
-- **Plurals live inside lemmas**: the corpus files regular *and many broken* plurals under the
-  singular's lemma with `MP`/`FP`/`MD`/`FD` flags — malak includes ملائكة (73 pl), shaytan includes
-  شياطين (18 pl), yawm includes أيام (27 pl) + يومين (3 dual), jannah includes جنات (71 pl + 8 dual),
-  shahr includes أشهر/شهور (7 pl + 2 dual). The SingularOnly method strips these uniformly.
-- **yawma'idhin** (يومئذ, "that day", 68x) is its own lemma and is *not* part of yawm's 405.
-- **niswa** (نسوة, 12:30) is tagged under `LEM:nisaA^'`, so the women-plural count (59) already includes it.
-- **Root overlap**: Some roots produce many unrelated words. For example, root `mlk` gives malak (angel), malik (king), mulk (dominion) — but these are different lemmas and don't contaminate each other's lemma counts.
-
-## Notebooks
-
-### 01_explore_and_discover.ipynb
-
-The main working notebook:
-
-1. **Load data** — parse the morphology file into a pandas DataFrame
-2. **Discovery** — for each of 38 target words, search by root to find all candidate lemmas
-3. **Validation** — convert Buckwalter lemmas to Arabic, check sample verses, confirm meanings
-4. **Counting** — apply all 4 methods uniformly, display results with notes
-
-### 02_results_and_exploration.ipynb
-
-Clean results and open-ended data exploration:
-
-1. **15 original word pairs** — side-by-side comparison table
-2. **Standalone words** — Qaala (said), Maghfira (forgiveness), embryology sequence
-3. **Exploration** — top lemmas, proper noun coincidences, broader semantic pairs, notable number matches, verse co-occurrence analysis
-
-### 03_audit_and_full_recount.ipynb
-
-The audit and the authoritative full results:
-
-1. **Audit evidence** — the bones/Akhira/Barr/Hayat findings, with every supporting row shown
-2. **Full method grid** — per word: lemma, lemma+variants, singular/dual/plural, lemma-by-POS,
-   root total, root-by-POS (N/ADJ/PN/V/T) → `output/full_counts.csv`
-3. **Occurrence index** — every counted occurrence with chapter:verse:word → `output/occurrences.csv`
-4. **Root listings** — all lemmas under every target root, with counts (per TASK.txt)
-5. **Qaala verb-form breakdown** — aspect × voice × person-gender-number
-6. **External cross-validation** — every target root checked against corpus.quran.com
-   (~140 numbers, all exact) plus token-level validation of all 3,960 occurrences via JQuranTree
-
-## Replicability
-
-To verify any count:
-
-1. Filter `output/occurrences.csv` to the word — every counted occurrence is listed with its
-   chapter:verse:word location, surface form, lemma, POS, and number
-2. Look up those locations in any Quran text, or on https://corpus.quran.com
-   (`qurandictionary.jsp?q=ROOT` with the Buckwalter root, e.g. `q=mlk`)
-3. The notebooks show every intermediate step — lemma discovery, validation, counting —
-   and notebook 03 re-derives everything with asserts tying the grid to the audit
-
-All Buckwalter strings were discovered from the data (not hardcoded from external sources) and validated by converting back to Arabic.
-
-### Validation status (2026-06-11)
-
-- **corpus.quran.com**: every root used by the 38 words was fetched and compared — all root
-  totals and per-lemma counts matched exactly (~140 numbers across 35 roots).
-- **Token level (JQuranTree)**: all **3,960** counted occurrences were checked against the
-  canonical Tanzil Uthmani text via [JQuranTree](https://github.com/dsog/jqurantree), the Java
-  API named in TASK.txt — every location holds a real token whose letters match the morphology
-  file's reconstruction (0 mismatches, 0 missing). See `validation/` for the runnable scripts
-  and `validation/token_validation_report.txt` for the report; full details in notebook 03,
-  section 9.
-
-### Tooling note
-
-Alternatives considered: [JQuranTree](https://corpus.quran.com/java/) (the corpus project's
-official Java API), [QuranTree.jl](https://aclanthology.org/2021.wanlp-1.22/) (Julia), and the
-pip package [`qurancorpus`](https://github.com/assem-ch/python-qurancorpus) (abandoned; parses
-only the obsolete v0.1 XML). For a Python/pandas workflow over the documented v0.4 TSV, direct
-parsing is standard practice; `src/parser.py` is verified 1:1 against the raw file and against
-the corpus website.
+Corpus-specific extensions: `^` maddah, `` ` `` dagger alif, `{` alif wasla, `p` tāʾ marbūṭa,
+`Y` alif maqṣūra, hamza seats `' > < & }`.
