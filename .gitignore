@@ -6,6 +6,9 @@ output/*
 !output/claims_audit_grid.csv
 !output/claims_occurrences.csv
 !output/claims_audit_matrix.png
+!output/count_multiplicity.csv
+!output/claims_near_miss.csv
+!output/zipf_rank_frequency.png
 !output/occurrences.csv
 !output/pairs_table.png
 __pycache__/

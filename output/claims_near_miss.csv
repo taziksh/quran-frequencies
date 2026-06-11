@@ -1,0 +1,32 @@
+id,claim,methods,exact,within_1,within_2,closest_miss
+C01,Dunya = Akhira,10,5,5,5,0
+C02,Mala'ika = Shayatin,10,1,1,1,0
+C03,Hayat = Mawt,11,0,0,0,39
+C04,Rajul = Imra'a (24),11,1,1,1,0
+C04b,"Rajul = Imra'a (23, 'chromosome pairs')",11,0,1,1,1
+C05,Salihat = Sayyi'at,10,0,0,0,13
+C06,Qul = Qalu,11,1,1,1,0
+C07,Iblis = isti'adha,8,0,0,2,2
+C08,Zakat = Baraka,10,0,0,0,17
+C09,Abrar : Fujjar = 6 : 3,3,1,1,1,0
+C10,Yusr : Usr = 36 : 12,10,0,0,0,7
+C11,Naf' = Fasad,10,1,1,1,0
+C12,Nas = Anbiya',10,0,0,0,50
+C13,Muhammad = Sharia,8,0,0,0,3
+C14,Iman = Kufr (25),10,2,2,2,0
+C15,Musiba = Shukr,10,0,0,1,2
+C16,Jahr = 'Alaniya,10,1,1,1,0
+C17,Harr = Bard (4),11,1,1,5,0
+C17b,"Harr = Bard (5, 'summer/winter')",11,0,1,1,1
+C18,Lisan = Maw'iza,10,1,1,1,0
+C19,Nabat = Shajar,10,0,1,1,1
+C20,Jaza' : Maghfira = 117 : 234,10,0,1,1,1
+C21,Adam = Isa,8,4,4,4,0
+C22,Yawm = 365,10,1,1,1,0
+C23,Ayyam + Yawmayn = 30,10,1,1,1,0
+C24,Shahr = 12,10,2,2,2,0
+C25,Bahr : Barr = 32 : 13 (= 71% : 29%),10,1,1,3,0
+C26,Sab' samawat = 7,1,1,1,1,0
+C27,Salawat = 5,10,2,2,2,0
+C27b,Salat + derivatives = 67,10,1,1,2,0
+C28,Rahma = 114 (= number of surahs),10,2,2,2,0
