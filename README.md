@@ -52,7 +52,7 @@ quran-frequencies/
     full_counts.csv         # The complete method grid, one row per word
     occurrences.csv         # Every counted occurrence with chapter:verse:word location
     pairs_table.png         # Regenerated pairs chart (reproducible from notebook 03)
-    *.png (legacy)          # Older charts, committed without generating code
+    *.png (legacy)          # Older charts; local only, not committed (no generating code)
   validation/
     validate_locations.py   # Token-level check of every occurrence vs canonical text
     DumpTokens.java         # JQuranTree token dumper used by the script
@@ -223,7 +223,8 @@ The audit and the authoritative full results:
 3. **Occurrence index** — every counted occurrence with chapter:verse:word → `output/occurrences.csv`
 4. **Root listings** — all lemmas under every target root, with counts (per TASK.txt)
 5. **Qaala verb-form breakdown** — aspect × voice × person-gender-number
-6. **External cross-validation** — ~25 numbers checked against corpus.quran.com (all exact)
+6. **External cross-validation** — every target root checked against corpus.quran.com
+   (~140 numbers, all exact) plus token-level validation of all 3,960 occurrences via JQuranTree
 
 ## Replicability
 
