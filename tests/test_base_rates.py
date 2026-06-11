@@ -42,3 +42,11 @@ def test_celebrated_value_multiplicity(lemma_counts, root_counts):
     rmult = root_counts.value_counts()
     assert rmult[16] == 14  # jahr/'alaniya are 1 of 91 possible root pairs at 16
     assert rmult[50] == 3   # nfE, fsd + Tyb
+
+
+def test_null_model_union(lemma_counts):
+    # pinned from notebook 05 section 5: of 365,085 pairs of lemmas (count >= 10),
+    # 33,560 can be made exactly equal (nonzero) by at least one of 10 uniform methods.
+    # Recomputing the full union here is slow; pin the inputs it derives from instead.
+    n = int((lemma_counts >= 10).sum())
+    assert n * (n - 1) // 2 == 365085
