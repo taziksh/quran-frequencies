@@ -281,11 +281,12 @@ Observations the verdict column compresses:
 
 ### 5.1 How surprising is an equality? Base rates
 
-**Takeaway: exact count equalities are so abundant in this corpus that a list of discovered
-"equal pairs" is evidence of searching, not of design — 1 in 11 arbitrary word pairs can be
-made exactly equal by some counting method.** The genre's implicit argument ("so many
-equalities cannot be coincidence") fails quantitatively. This is a property of language
-statistics, not of the Quran specifically.
+**Takeaway: exact count equalities are abundant in this corpus — 1 in 11 arbitrary word
+pairs can be made exactly equal by some counting method — so a list of discovered equal pairs
+is not, by itself, evidence of anything beyond the search that produced it.** The popular
+argument "so many equalities cannot be coincidence" does not survive quantification. This is
+a property of natural-language word-frequency statistics generally, not of the Quran
+specifically.
 
 The analysis lives in [`notebooks/05_base_rates.ipynb`](notebooks/05_base_rates.ipynb);
 one-line results:
@@ -293,7 +294,7 @@ one-line results:
 | Analysis (notebook §) | Result |
 |---|---|
 | Count collisions (§1) | 8,594 exactly-equal pairs among lemmas with count ≥ 10; every celebrated value has other words on it (88 has 4, 25 has 12) — [`count_multiplicity.csv`](output/count_multiplicity.csv) |
-| Zipf fit (§2) | slope −1.10, ordinary natural language; the crowded low counts are why collisions abound — [`zipf_rank_frequency.png`](output/zipf_rank_frequency.png) |
+| Zipf fit (§2) | slope −1.10, the shape characteristic of natural language; the crowded low counts are why collisions abound — [`zipf_rank_frequency.png`](output/zipf_rank_frequency.png) |
 | Near-miss sensitivity (§3) | failed claims split into near misses (jazāʾ/maghfira off by 1) and decisive failures (ḥayāt/mawt off by 39) — [`claims_near_miss.csv`](output/claims_near_miss.csv) |
 | Null model, exhaustive (§5) | 9.2% of all 365,085 pairs equalizable by some method; the audited pairs hit 41% (~4.5×) — the enrichment survivorship selection produces |
 
