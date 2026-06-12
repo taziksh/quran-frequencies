@@ -161,7 +161,7 @@ Three independent layers, strongest last:
    file (77,915). Sixteen sanity asserts pin the audited values in notebook 03, and notebook 04
    asserts every claims-audit verdict and its key counts; the
    occurrence index is asserted to tie out with the count grid for all 38 words. The unit and
-   integration test suite (`tests/`, 38 tests) pins the same invariants for CI-style checking.
+   integration test suite (`tests/`, 44 tests) pins the same invariants for CI-style checking.
 2. **Upstream revision.** Every root used by the 38 words (35 roots) and every additional root
    used by the claims audit (22 roots) was compared against the corpus maintainers' dictionary
    pages [2] — every root total and every per-lemma count matched exactly (~260 numbers).
@@ -173,6 +173,9 @@ Three independent layers, strongest last:
    compared, letter for letter, with the token at that location in the canonical text. Result:
    **7,806/7,806 match, 0 mismatches, 0 missing**
    (`validation/token_validation_report.txt`; scripts in `validation/`).
+
+A fourth, independent-team check — re-counting under the QuranMorph annotation [11] — is
+reported in [§5.2](#52-cross-annotation-check-quranmorph).
 
 To verify any single number yourself: filter [`output/occurrences.csv`](output/occurrences.csv)
 (the 38 words) or [`output/claims_occurrences.csv`](output/claims_occurrences.csv) (the claims
@@ -302,6 +305,39 @@ What the base rates do **not** show: they demonstrate that the observed equaliti
 special explanation, not that no design exists — selection and design are observationally
 identical here.
 
+### 5.2 Cross-annotation check: QuranMorph
+
+All counts above rest on one team's annotation decisions. **QuranMorph** [11] is the only
+machine-readable morphological annotation of the Quran produced independently of the Quranic
+Arabic Corpus: three linguists at Birzeit University manually lemmatized all 77,429 words
+against the Qabas lexicon (CC BY 4.0; committed verbatim in `data/quranmorph/`). Notebook
+[`06_quranmorph_crosscheck.ipynb`](notebooks/06_quranmorph_crosscheck.ipynb) re-examines this
+project's counts under it. The two corpora align word-for-word (same 77,429 words, identical
+verse/word indexing), so every comparison is occurrence-aligned rather than spelling-matched.
+
+- **50 of 58 word selections agree exactly** (yawm 405, raḥma 114, shaytan 88, Adam 25,
+  Isa 25, …); the 8 boundary differences are all systematic lexicon-design merges/splits, each
+  examined individually ([`quranmorph_lemma_map.csv`](output/quranmorph_lemma_map.csv)).
+- **The audit corrections of §2 are independently corroborated**: QuranMorph splits *barr*
+  into land = 12 and dutiful/righteous = 10 — the same 12 + 10 split as §2.3 — and it too
+  files the 13 plural "bones" occurrences under the "great" lemma (§2.1). Two independent
+  teams made the same calls.
+- **One flagship claim is annotation-scheme-dependent**: dunya/akhira 115 : 115 (C01). No
+  QuranMorph selection yields 115 for "the hereafter" — its lemmas put those words at
+  15 + 100, and the larger lemma also covers "last". The equality is countable only through
+  QAC's grammatical-gender feature, which QuranMorph's scheme does not expose. This does not
+  make the claim false; it makes it dependent on one annotation scheme's feature set.
+- **Claim verdicts are otherwise stable wherever expressible**: every lemma-level claim that
+  held under QAC holds under QuranMorph (Adam = Isa, raḥma 114, shaytan 88), and every
+  decisive failure stays failed (ḥayāt/mawt, nās/anbiyāʾ). Claims needing QAC-specific
+  features (gender, number, pronoun suffixes, roots) are not expressible in QuranMorph and are
+  marked as such ([`quranmorph_crosscheck.csv`](output/quranmorph_crosscheck.csv)).
+
+QuranMorph annotates lemma + POS only — no roots, no grammatical number — so root-level and
+convention-level claims cannot be cross-checked there. Agreement is corroboration by an
+independent team, not ground truth; where the corpora disagree, the disagreement measures how
+much rests on editorial choices.
+
 ## 6. Limitations and interpretive notes
 
 - **Counts inherit the corpus's annotation decisions.** Where those decisions are surprising
@@ -333,7 +369,8 @@ identical here.
 - **Computational resources.** The Quranic Arabic Corpus and its annotation methodology
   [1, 8] are the foundation; Tanzil [3] provides the underlying verified text; JQuranTree [4],
   QuranTree.jl [5], and python-qurancorpus [6] are the existing programmatic interfaces.
-  QuranMorph [11] is a recent independently produced morphological annotation of the Quran.
+  QuranMorph [11] is a recent independently produced morphological annotation of the Quran,
+  used here as a cross-annotation check (§5.2).
 - **Earlier iteration of this repository.** Notebooks 01/02 predate the audit; their published
   figures contained the errors documented in §2 and have been corrected in place.
 
@@ -341,9 +378,9 @@ identical here.
 
 - **Full-vocabulary release** — extend the grid from the 38 selected words to every lemma and
   root in the corpus, as a citable frequency table.
-- **Cross-resource comparison** — quantify divergences between corpus v0.4, the website's
-  current revision, QuranMorph [11], and ʿAbd al-Bāqī [9]; annotation differences like the
-  bones case (§2.1) suggest more such cases exist outside our 38 words.
+- **Cross-resource comparison** — the QuranMorph comparison is done (§5.2); remaining:
+  quantify divergences against the website's current revision and ʿAbd al-Bāqī [9], and extend
+  the QuranMorph comparison beyond the 58 selections to the full vocabulary.
 - **Semantic disambiguation** — the Barr land/righteous split (§2.3) is form-based; a
   context- or tafsir-informed classification of polysemous lemmas would let counts be reported
   per sense rather than per form.
@@ -359,7 +396,7 @@ permits verbatim copies — see [Data](#10-data-and-licensing)), so a fresh clon
 git clone <this-repo> && cd quran-frequencies
 uv sync
 uv run jupyter notebook        # run the notebooks
-uv run --extra dev pytest      # run the test suite (38 tests)
+uv run --extra dev pytest      # run the test suite (44 tests)
 ```
 
 | Path | Contents |
@@ -372,6 +409,8 @@ uv run --extra dev pytest      # run the test suite (38 tests)
 | `output/occurrences.csv` | Every counted occurrence with chapter:verse:word location |
 | `output/claims_occurrences.csv` | Same, for every location any claims-audit method counts |
 | `notebooks/05_base_rates.ipynb` | **Base rates** (§5.1): count-collision statistics, Zipf fit, near-miss sensitivity, exhaustive null model |
+| `notebooks/06_quranmorph_crosscheck.ipynb` | **Cross-annotation check** (§5.2): all 58 selections and the claim verdicts re-examined under QuranMorph |
+| `output/quranmorph_lemma_map.csv`, `output/quranmorph_crosscheck.csv` | Cross-annotation artifacts (regenerated by notebook 06) |
 | `output/count_multiplicity.csv`, `output/claims_near_miss.csv`, `output/zipf_rank_frequency.png` | Base-rate artifacts (regenerated by notebook 05) |
 | `output/claims_audit.csv` | One row per claim: claimed numbers, verdict, methods it reproduces under, sources, notes |
 | `output/claims_audit_grid.csv` | Every claim × every method × both sides, with match flags |
@@ -380,12 +419,12 @@ uv run --extra dev pytest      # run the test suite (38 tests)
 | `tests/` | Unit tests (16-line verbatim fixture) + integration tests (pinned audited counts) |
 | `validation/` | Token-level validation scripts (Python + Java) and report |
 
-Everything in `output/` regenerates by running notebooks 03, 04, and 05 top to bottom. The token
+Everything in `output/` regenerates by running notebooks 03–06 top to bottom. The token
 validation is re-run with the commands in the docstring of `validation/validate_locations.py`.
 
 ## 10. Data and licensing
 
-The single data source is the **Quranic Arabic Corpus morphology file, v0.4** [1]
+The primary data source is the **Quranic Arabic Corpus morphology file, v0.4** [1]
 (`data/quranic-corpus-morphology-0.4.txt`, 77,915 STEM entries among 128,219 segment records),
 which annotates every word of the Quran with part of speech, lemma, root, person/gender/number,
 case, mood, and more, in Buckwalter transliteration [7], on top of the Tanzil Uthmani text [3].
@@ -394,6 +433,11 @@ The unmodified file is committed verbatim, as its terms permit (annotations: © 
 GNU GPL; text: © Tanzil.info, CC BY-ND 3.0 — both require the copyright block, which is intact
 in the file, and attribution with links, given here and in [References](#references)). Do not
 edit the file; updates come from the corpus download page [1].
+
+The cross-annotation check (§5.2) uses the **QuranMorph dataset** [11]
+(`data/quranmorph/`, 77,429 rows), committed verbatim with the authors' license and readme
+files; it is © SinaLab, Birzeit University, CC BY 4.0, obtained from the authors' download
+form on 2026-06-11.
 
 Code in this repository (parser, notebooks, tests, validation scripts) is the author's own.
 

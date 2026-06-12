@@ -1,0 +1,17 @@
+id,claim,claimed,qac_verdict,quranmorph,stability
+C01,Dunya = Akhira,115:115,"holds (lemma, gender filter)","dunya 115; akhira: no 115 selection — its 115 words map to {'آخِرُ': np.int64(100), 'آخِرَةٌ': np.int64(15)}, and the big lemma also covers 'last'",SCHEME-DEPENDENT
+C02,Mala'ika = Shayatin,88:88,holds (lemma),shaytan 88; malak (2-lemma union) 88,stable (via 2-lemma union)
+C03,Hayat = Mawt,145:145,does not hold,76 vs 53 — nowhere near 145 either,stable (fails)
+C05,Salihat = Sayyi'at,167:167,one side only (root),lemma level 127 vs 58; root level not expressible,consistent (lemma); root n/a
+C11,Naf' = Fasad,50:50,holds (root),root not expressible; lemma level 11 = 11 (an equality QuranMorph also shows),root n/a; lemma equality replicates
+C12,Nas = Anbiya',50:50,does not hold,241 vs 75,stable (fails)
+C13,Muhammad = Sharia,4:4,one side only,4 vs 1,stable (one side)
+C16,Jahr = 'Alaniya,16:16,holds (root),root not expressible; lemmas 7 vs 4,n/a (root)
+C18,Lisan = Maw'iza,25:25,holds (root),root not expressible; lisan lemma 25 agrees with QAC's 25,n/a (root); lisan side stable
+C19,Nabat = Shajar,26:26,mixed methods only,"9 vs 26 — shajar = 26 is a single lemma here, nabat is still 9",stable (one side per method)
+C20,Jaza' : Maghfira = 117:234,—,one side only (root),root not expressible; lemmas 42 vs 28 agree with QAC,n/a (root)
+C21,Adam = Isa,25:25,holds (lemma),25 = 25,STABLE (holds)
+C22,Yawm = 365,365,"holds (singular, no pron suffix)",lemma 405 agrees with QAC's 405; the 365 convention needs number+suffix features,n/a (features); lemma stable
+C24,Shahr = 12,12,holds (singular),lemma 21 agrees with QAC's 21; singular not expressible,n/a (features); lemma stable
+C25,Bahr : Barr = 32:13,—,holds (singular definite),"definite/singular not expressible; lemmas 41 vs barr-split {'بَرٌّ': np.int64(12), 'بَارٌّ': np.int64(10)} — the 12 independently confirms the land count (README 2.3)",n/a (features); land=12 corroborated
+C28,Rahma = 114,114,holds (lemma),114,STABLE (holds)

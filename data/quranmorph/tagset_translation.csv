@@ -1,0 +1,54 @@
+pos_ar,pos_en
+اسم,NOUN
+"اسم علم",NOUN_PROP
+صفة,ADJ
+"صفة مقارنة",ADJ_COMP
+"صفة عدد",ADJ_NUM
+"اسم عدد",NOUN_NUM
+"اسم كم",NOUN_QUANT
+عدد,DIGIT
+"اسم صوت",NOUN_VOICE
+حرف-اختصار,ABBREV
+"فعل ماضي",PV
+"فعل مضارع",IV
+"فعل أمر",CV
+"فعل ماضي مجهول",PV_PASS
+"فعل مضارع مجهول",IV_PASS
+ضمير,PRON
+"ضمير اشارة",DEM_PRON
+"اسم موصول",REL_PRON
+"ظرف موصول",REL_ADV
+ظرف,ADV
+"أداة استفهام",INTERROG_PART
+"ظرف استفهام",INTERROG_ADV
+"ضمير استفهام",INTERROG_PRON
+"أداة إستثناء",RESTRIC_PART
+"أداة تفصيل",FOCUS_PART
+"أداة نداء",VOC_PART
+"أداة تعريف",DET
+أداة,PART
+"أداة ربط",SUB_CONJ
+"حرف جر",PREP
+"حرف جر + أداة تعريف","PREP + DET"
+"حرف جر + أداة ربط","PREP + SUB_CONJ"
+"حرف جر + أداة نفي","PREP + NEG_PART"
+"حرف جر + اسم موصول","PREP + REL_PRON"
+"حرف جر + ضمير استفهام","PREP + INTERROG_PRON"
+"حرف جر + ضمير اشارة","PREP + DEM_PRON"
+"أداة ربط + أداة نفي","SUB_CONJ + NEG_PART"
+عطف,CONJ
+"أداة استقبال",FUT_PART
+"أداة مضارعة",PROG_PART
+"أداة نفي",NEG_PART
+"أداة نفي + اسم","NEG_PART + NOUN"
+"فعل ماضي + أداة ربط","PV + SUB_CONJ"
+"شبه فعل + اسم موصول","PSEUDO_VERB + REL_PRON"
+تعجب,INTERJ
+"ضمير تعجب",EXCLAM_PRON
+"جواب شرط + أداة نفي","RC_PART + NEG_PART"
+"اسم فعل/جامد",VERB
+"أداة فعل",VERB_PART
+"شبه فعل",PSEUDO_VERB
+"علامة ترقيم",PUNC
+إيموجي,EMOJI
+جواب,-

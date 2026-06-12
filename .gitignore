@@ -9,8 +9,11 @@ output/*
 !output/count_multiplicity.csv
 !output/claims_near_miss.csv
 !output/zipf_rank_frequency.png
+!output/quranmorph_lemma_map.csv
+!output/quranmorph_crosscheck.csv
 !output/occurrences.csv
 !output/pairs_table.png
+!output/pairs_bars.png
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
