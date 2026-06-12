@@ -281,38 +281,25 @@ Observations the verdict column compresses:
 
 ### 5.1 How surprising is an equality? Base rates
 
-The verdicts above say which claims reproduce; the base rates say whether reproducing is even
-surprising (`notebooks/05_base_rates.ipynb`). It mostly isn't:
+**Takeaway: exact count equalities are so abundant in this corpus that a list of discovered
+"equal pairs" is evidence of searching, not of design — 1 in 11 arbitrary word pairs can be
+made exactly equal by some counting method.** The genre's implicit argument ("so many
+equalities cannot be coincidence") fails quantitatively. This is a property of language
+statistics, not of the Quran specifically.
 
-- **Equal counts are abundant.** Among the 855 lemmas occurring ≥ 10 times there are **8,594
-  exactly-equal pairs** — a random pair of such lemmas is exactly equal 2.35% of the time and
-  within ±1 6.6% of the time. At the root level: 2,817 equal pairs among roots ≥ 10.
-- **Every celebrated count value has company.** Malak and shaytan share their 88 with *mathal*
-  ("example") and *faʿala* ("to do") — the 88 = 88 equality is one of 6 possible at that value.
-  Twelve lemmas occur exactly 25 times (66 possible "25 = 25" pairs; Adam = Isa is one).
-  Jahr/ʿalāniya is one of **91** possible root pairs at 16; nafʿ/fasād shares its root-level 50
-  with *ṭyb*. The full multiplicity table is
-  [`output/count_multiplicity.csv`](output/count_multiplicity.csv).
-- **The distribution explains the abundance.** Lemma frequencies are Zipfian (slope ≈ −1.10
-  on the rank–frequency plot, [`output/zipf_rank_frequency.png`](output/zipf_rank_frequency.png));
-  41% of lemmas occur once and 74% occur ≤ 5 times, so small count values are crowded and
-  collisions are the norm, not the exception.
-- **Near-miss sensitivity** ([`output/claims_near_miss.csv`](output/claims_near_miss.csv)):
-  for each claim, how many methods land exactly on the claimed numbers vs. miss by ≤ 1 or
-  ≤ 2. The failed claims separate cleanly into *near misses* (jazāʾ/maghfira and the 23/23
-  and 5/5 variants miss by exactly 1) and *decisive failures* (ḥayāt/mawt's closest method
-  is 39 away; nās/anbiyāʾ 50 away) — the famous 145/145 is not even close under any selection.
-- **Null model (exhaustive, not sampled).** Simulating the genre's discovery process: of all
-  365,085 pairs of lemmas with count ≥ 10, **33,560 (9.2%) can be made exactly equal (nonzero)
-  by at least one of the 10 uniform methods** — 1 in 11. Method freedom alone roughly
-  quadruples the single-method coincidence rate (~2.4%); a claimant examining a few hundred
-  tempting pairs finds dozens of "miracles" with no insider knowledge. The audited pairs pass
-  the identical test at 7/17 (41%), a ~4.5× enrichment over chance — which is what
-  survivorship selection looks like, and is observationally indistinguishable from design.
-  Notebook 05 §5.
-- What the base rates do **not** show: they demonstrate that the observed equalities require
-  no special explanation, not that no design exists — statistics here can only conclude
-  "not surprising under these assumptions".
+The analysis lives in [`notebooks/05_base_rates.ipynb`](notebooks/05_base_rates.ipynb);
+one-line results:
+
+| Analysis (notebook §) | Result |
+|---|---|
+| Count collisions (§1) | 8,594 exactly-equal pairs among lemmas with count ≥ 10; every celebrated value has other words on it (88 has 4, 25 has 12) — [`count_multiplicity.csv`](output/count_multiplicity.csv) |
+| Zipf fit (§2) | slope −1.10, ordinary natural language; the crowded low counts are why collisions abound — [`zipf_rank_frequency.png`](output/zipf_rank_frequency.png) |
+| Near-miss sensitivity (§3) | failed claims split into near misses (jazāʾ/maghfira off by 1) and decisive failures (ḥayāt/mawt off by 39) — [`claims_near_miss.csv`](output/claims_near_miss.csv) |
+| Null model, exhaustive (§5) | 9.2% of all 365,085 pairs equalizable by some method; the audited pairs hit 41% (~4.5×) — the enrichment survivorship selection produces |
+
+What the base rates do **not** show: they demonstrate that the observed equalities require no
+special explanation, not that no design exists — selection and design are observationally
+identical here.
 
 ## 6. Limitations and interpretive notes
 
