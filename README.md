@@ -41,7 +41,8 @@ Other counting methods are defined in [Methods](#3-methods) and reported for eve
 | Shahr / Yawm | 21 | 405 | singular-only: **12** / **375** |
 
 Standalone words: **Qaala** (said) 1,618 verb occurrences — 1,004 perfect, 265 imperfect, 349
-imperative, of which *qul* ("say!", 2nd masculine singular) is 332. Embryology sequence
+imperative, of which *qul* ("say!", 2nd masculine singular) is 332 — and **Maghfira**
+(forgiveness) 28, the 38th word, paired with jazāʾ in the claims audit (C20). Embryology sequence
 (lemma + declared variants, §3.3): turab (dust) 17 → nutfa (drop) 12 → alaqa (clot) 6 →
 mudgha (lump) 3 → izam (bones) 15 → lahm (flesh) 12.
 
@@ -221,7 +222,7 @@ variants of the same claim with different numbers.
 | C18 | Lisan = Maw'iza (لسان / موعظة) | 25 : 25 | holds (uniform) | root |
 | C19 | Nabat = Shajar (نبات / شجر) | 26 : 26 | mixed methods only | nabat: root / shajar: lemma (root = 27) |
 | C20 | Jaza' : Maghfira (جزاء / مغفرة) | 117 : 234 | one side only | maghfira: root (jaza' root = 118) |
-| C21 | Adam = Isa (آدم / عيسى) | 25 : 25 | holds (lemma) | lemma |
+| C21 | Adam = Isa (آدم / عيسى) | 25 : 25 | holds (lemma) | lemma; singular; no pron suffix |
 | C22 | Yawm (يوم) | 365 | holds (uniform) | singular, no pron suffix (lemma 405, singular 375) |
 | C23 | Ayyam + Yawmayn (أيام / يومين) | 30 | holds (uniform) | plural+dual (27 + 3) |
 | C24 | Shahr (شهر) | 12 | holds (uniform) | singular (lemma 21) |
@@ -229,7 +230,7 @@ variants of the same claim with different numbers.
 | C26 | Sab' samawat (سبع سماوات) | 7 | holds (uniform) | phrase count (5 + 2 word orders) |
 | C27 | Salawat (صلوات) | 5 | holds (uniform) | plural (lemma 83) |
 | C27b | Salat + derivatives (صلاة) | 67 | holds (uniform) | singular, no pron suffix (root 99) |
-| C28 | Rahma (رحمة), "= number of surahs" | 114 | holds (lemma) | lemma |
+| C28 | Rahma (رحمة), "= number of surahs" | 114 | holds (lemma) | lemma; singular |
 
 Distribution: 5 hold at the lemma level, 14 hold under some other uniform method, 2 reproduce
 only by mixing methods between the two sides, 7 reproduce on one side only, 3 reproduce under
@@ -259,15 +260,15 @@ Observations the verdict column compresses:
   singular minus the 10 pronoun-suffixed occurrences ("their day"); īmān/kufr = 25/25 is
   exactly the same exclusion applied to those lemmas (from 45/37). The same convention applied
   across the grid breaks other equalities (malāʾika/shayāṭīn become 83/87), so it is not a
-  generally miracle-friendly selection — each claim needs its own convention.
+  selection that systematically favors the claims — each claim needs its own convention.
 - **The viral sea/land 32 : 13 reproduces under "singular + definite article" — but** the 13
   includes 52:28, the divine name *al-Barr* ("the Most Kind"), not the word "land" (the land
   count is 12, §2.3); and the percentage step (32⁄45 = 71.1% "= Earth's water share") is an
   inference no word count can carry — as with every interpretive layer on these claims
   (= days of the year, = number of surahs, = chromosome count), a separate, non-arithmetic
   assertion that a frequency table can neither confirm nor refute.
-- **Three pairs nobody seems to verify hold exactly at the root level:** nafʿ/fasād 50/50,
-  jahr/ʿalāniya 16/16, lisān/mawʿiẓa 25/25.
+- **Three pairs hold exactly at the root level** — nafʿ/fasād 50/50, jahr/ʿalāniya 16/16,
+  lisān/mawʿiẓa 25/25 — though they circulate far less than the famous pairs.
 - **Look-elsewhere effect:** each claim faces 13 named methods (10 applicable on average), so
   a single match is weak evidence by itself — quantified in §5.1. The value of the audit is
   that the method behind every number is now explicit and reproducible, including for the
@@ -280,8 +281,9 @@ Observations the verdict column compresses:
 
 **Takeaway: exact count equalities are abundant in this corpus — among reasonably frequent
 words (count ≥ 10), 1 in 11 arbitrary pairs can be made exactly equal by at least one of 10
-uniform counting methods, and the rate rises for rarer words — so a list of discovered equal
-pairs is not, by itself, evidence of anything beyond the search that produced it.** This is a
+uniform counting methods (the 13 methods of §5 minus the three claim-specific ones), and the
+rate rises for rarer words — so a list of discovered equal pairs is not, by itself, evidence
+of anything beyond the search that produced it.** This is a
 property of natural-language word-frequency statistics generally, not of the Quran
 specifically.
 
@@ -293,7 +295,7 @@ one-line results:
 | Count collisions (§1) | 8,594 exactly-equal pairs among lemmas with count ≥ 10; every celebrated value has other words on it (88 has 4, 25 has 12) — [`count_multiplicity.csv`](output/count_multiplicity.csv) |
 | Zipf fit (§2) | slope ≈ −1.1 (range-sensitive: −0.9 to −1.2 across fit windows), the shape characteristic of natural language; the crowded low counts are why collisions abound — [`zipf_rank_frequency.png`](output/zipf_rank_frequency.png) |
 | Near-miss sensitivity (§3) | failed claims split into near misses (jazāʾ/maghfira off by 1) and decisive failures (ḥayāt/mawt off by 39) — [`claims_near_miss.csv`](output/claims_near_miss.csv) |
-| Null model, exhaustive (§5) | 9.2% of all 365,085 pairs (lemmas with count ≥ 10) equalizable by some method. Audited pairs, stratified: 5/10 = 50% (~5×) inside that population; 2/7 among rarer-word pairs, whose null itself rises to 14–18%+ — the enrichment survivorship selection produces |
+| Null model, exhaustive (§5) | 9.2% of all 365,085 pairs (lemmas with count ≥ 10) can be equalized by some method. Of the 17 audited equality pairs, 10 lie inside that population and 5 of them equalize (50%, ~5× the null); the other 7 involve rarer words, where the null itself rises to 14–18%+, and 2 equalize — the enrichment that survivorship selection produces |
 
 What the base rates do **not** show: they demonstrate that the observed equalities require no
 special explanation, not that no design exists — selection and design are observationally
@@ -313,7 +315,8 @@ QuranMorph distribution rather than boundary disagreements — so every comparis
 occurrence-aligned rather than spelling-matched.
 
 - **50 of 58 word selections agree exactly** (yawm 405, raḥma 114, shaytan 88, Adam 25,
-  Isa 25, …), counting as totals over the QuranMorph lemmas covering the same occurrences
+  Isa 25, …). The 58 selections are the 38 words plus the 20 additional claim words of §5,
+  each re-counted as totals over the QuranMorph lemmas covering the same occurrences
   (QuranMorph sometimes splits a word across two lemmas, e.g. malak 67 + 21 = 88). The 8
   differences are systematic lexicon-design differences — seven merges plus the Akhira
   feature-scheme case below — each examined individually
