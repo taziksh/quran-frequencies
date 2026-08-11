@@ -12,9 +12,9 @@ output/*
 !output/quranmorph_lemma_map.csv
 !output/quranmorph_crosscheck.csv
 !output/occurrences.csv
-!output/pairs_table.png
-!output/pairs_bars.png
+!output/pairs.png
 __pycache__/
+.pytest_cache/
 *.pyc
 .ipynb_checkpoints/
 *.egg-info/

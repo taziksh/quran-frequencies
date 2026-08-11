@@ -3,20 +3,16 @@
 **A verified frequency count of 38 selected words in the Quran** (life, death, angel, satan,
 this-world, hereafter, …), derived from the Quranic Arabic Corpus morphological annotation,
 v0.4 [1]. Every word is counted by several uniform methods side by side — by lemma, by root, by
-part of speech, by grammatical number — rather than by a single cherry-picked figure. The
-results are validated three independent ways: against the raw annotation file, against the
-corpus maintainers' current revision [2], and token-by-token against the canonical Uthmani text
-[3] through the JQuranTree API [4]. Every counted occurrence (7,806 unique locations across
-the word counts and the claims audit) is indexed by chapter:verse:word so that any number in
-this document can be checked by hand. On top of the
-counts, [§5](#5-claims-audit) audits 31 popular numerical claims about the Quran — Nawfal's
-word pairs, "yawm = 365", "sea : land = 71% : 29%" — each evaluated against every counting
-method, with an explicit verdict and the exact selection behind every reproducing number.
+part of speech, by grammatical number — rather than by a single cherry-picked figure, and every
+counted occurrence (7,806 unique locations) is indexed by chapter:verse:word, so any number in
+this document can be checked by hand ([§4](#4-validation)). On top of the counts,
+[§5](#5-claims-audit) audits 31 popular numerical claims about the Quran — Nawfal's word
+pairs, "yawm = 365", "sea : land = 71% : 29%" — each evaluated against every counting method,
+with an explicit verdict and the exact selection behind every reproducing number.
 
-*Counts computed and audited 2026-06-11 from corpus morphology v0.4 (frozen snapshot, committed
-in `data/`). An earlier iteration of this project published several incorrect figures; the audit
-that found and fixed them is documented in [Findings](#2-audit-findings-and-corrections) and
-reproduced in `notebooks/03_audit_and_full_recount.ipynb`.*
+*Counts computed and audited 2026-06-11 from corpus morphology v0.4 (frozen snapshot,
+committed in `data/`). Earlier published figures from this repository contained errors; the
+audit that found and fixed them is documented in [§2](#2-audit-findings-and-corrections).*
 
 ---
 
@@ -45,29 +41,26 @@ Other counting methods are defined in [Methods](#3-methods) and reported for eve
 | Shahr / Yawm | 21 | 405 | singular-only: **12** / **375** |
 
 Standalone words: **Qaala** (said) 1,618 verb occurrences — 1,004 perfect, 265 imperfect, 349
-imperative, of which *qul* ("say!", 2nd masculine singular) is 332. Embryology sequence:
-turab (dust) 17 → nutfa (drop) 12 → alaqa (clot) 6 → mudgha (lump) 3 → izam (bones) 15 →
-lahm (flesh) 12.
+imperative, of which *qul* ("say!", 2nd masculine singular) is 332. Embryology sequence
+(lemma + declared variants, §3.3): turab (dust) 17 → nutfa (drop) 12 → alaqa (clot) 6 →
+mudgha (lump) 3 → izam (bones) 15 → lahm (flesh) 12.
 
 Two results that nuance popular claims, stated plainly:
 
-- **Yawm (day) singular is 375, not 365.** The widely circulated "365 days" figure does not
-  hold at the lemma or singular level in this corpus (405 total = 375 singular + 27 plural +
-  3 dual); yawma'idhin ("that day", 68×) is a separate lemma and is not part of the 405. The
-  365 reproduces only under a specific convention — singular, excluding the 10 occurrences
-  with an attached pronoun ("their day") — documented in the claims audit (§5, C22).
+- **Yawm (day) singular is 375, not 365.** The lemma total is 405 = 375 singular + 27 plural +
+  3 dual; yawma'idhin ("that day", 70×) is a separate lemma and is not part of the 405. The
+  circulating 365 reproduces only under a specific convention documented in the claims audit
+  (§5, C22).
 - **Shahr (month) singular is 12**, which does match the popular claim.
 
-![Pairs chart](output/pairs_bars.png)
-
-(Variant of this chart as a table: [`output/pairs_table.png`](output/pairs_table.png). Both
-regenerate from notebook 03.)
+![Word-pair chart](output/pairs.png)
 
 ## 2. Audit findings and corrections
 
 A from-scratch audit (2026-06-11) found that earlier published figures from this project
-contained errors. Each finding below is shown with full supporting evidence in notebook 03,
-section 2, and was confirmed against the corpus website [2].
+contained errors — including a miscount of the word list itself (38 words, not 37). Each
+finding below is shown with full supporting evidence in notebook 03, section 2, and was
+confirmed against the corpus website [2].
 
 ### 2.1 Izam (bones): 2 → 15
 
@@ -96,10 +89,6 @@ land" contexts; 52:28 is the divine name *al-Barr*; 19:14 and 19:32 are "dutiful
 Mawt had been credited the variant nouns `mawotat` (3) + `mamaAt` (3) → 56 while Hayat received
 nothing. Its exact counterparts — `m~aHoyaA` (2; 6:162 pairs مَحْيَا with مَمَات in a single
 verse) and `HayawaAn` (1; 29:64 "the true life") — are now included symmetrically → 79.
-
-### 2.5 Word count
-
-The task list contains 38 words; earlier documentation said 37.
 
 ## 3. Methods
 
@@ -153,15 +142,19 @@ used here for validation, not counting), QuranTree.jl [5] (Julia), and the `qura
 package [6] (abandoned; reads only the obsolete v0.1 XML format). The parser is verified line
 by line against the raw file and by the validation layers below.
 
+Charts are generated by the notebooks through a single shared style module
+(`src/plotstyle.py`): one fixed palette (validated for color-vision-deficiency separation and
+surface contrast), one title/label treatment, one mark vocabulary across every figure.
+
 ## 4. Validation
 
 Three independent layers, strongest last:
 
 1. **Internal.** The parser's STEM count is asserted against an independent scan of the raw
    file (77,915). Sixteen sanity asserts pin the audited values in notebook 03, and notebook 04
-   asserts every claims-audit verdict and its key counts; the
-   occurrence index is asserted to tie out with the count grid for all 38 words. The unit and
-   integration test suite (`tests/`, 44 tests) pins the same invariants for CI-style checking.
+   asserts every claims-audit verdict and its key counts; the occurrence index is asserted to
+   tie out with the count grid for all 38 words. The unit and integration test suite
+   (`tests/`, 54 tests) pins the same invariants for CI-style checking.
 2. **Upstream revision.** Every root used by the 38 words (35 roots) and every additional root
    used by the claims audit (22 roots) was compared against the corpus maintainers' dictionary
    pages [2] — every root total and every per-lemma count matched exactly (~260 numbers).
@@ -195,11 +188,14 @@ precisely [13, 14]. Computation: `notebooks/04_claims_audit.ipynb`; per-claim so
 notes: [`output/claims_audit.csv`](output/claims_audit.csv); every count under every method:
 [`output/claims_audit_grid.csv`](output/claims_audit_grid.csv).
 
-Verdicts: **holds (lemma)** — reproduces at this project's headline lemma level;
-**holds (uniform)** — reproduces under some uniform method, the *same* selection applied to
-both sides; **mixed methods only** — each side reproduces but only under a *different* method;
-**one side only**; **does not hold** — no method examined reproduces it. The b-suffixed ids
-are circulating variants of the same claim with different numbers.
+Verdicts: **holds (lemma)** — reproduces at this project's headline lemma level (declared
+variants count where they define the word: C17 harr/bard is the one such case, plain lemmas
+3 : 2); **holds (uniform)** — reproduces under some uniform method, the *same* selection
+applied to both sides (a grammatical category qualifies only when the claim itself names it,
+as in C06 qul = imperative vs qālū = perfect 3MP); **mixed methods only** — each side
+reproduces but only under a *different*, unstated method per side; **one side only**;
+**does not hold** — no method examined reproduces it. The b-suffixed ids are circulating
+variants of the same claim with different numbers.
 
 | # | Claim | Claimed | Verdict | Reproduces under |
 |---|---|---|---|---|
@@ -242,18 +238,18 @@ why per-claim, per-method verdicts are worth publishing.
 
 ![Claims audit matrix](output/claims_audit_matrix.png)
 
-(A colored cell = the claimed numbers reproduce exactly under that method; light gray =
-computed, no match; white = method not applicable. Regenerates from notebook 04.)
+(Rows grouped by verdict. A blue cell = the claimed numbers reproduce exactly under that
+method; light gray = computed, no match; blank = method not applicable.)
 
 Observations the verdict column compresses:
 
 - **The symmetries are not jointly consistent.** No single counting rule makes the claims hold
   *together*: the best-performing method ("singular, no pron suffix") recovers only 6 of 31,
-  and half of those are words with no plurals or suffixed forms, which hold under nearly any
-  method. Plain lemma counting recovers 4; root counting recovers a *different* 3. The
-  selections that rescue individual claims break others (the convention behind yawm = 365
+  two of which (dunya/akhira, Adam/Isa) have neither plurals nor suffixed forms and hold under
+  nearly any method. Plain lemma counting recovers 4; root counting recovers a *different* 3.
+  The selections that rescue individual claims break others (the convention behind yawm = 365
   makes angels/devils 83 vs 87; the root method behind nafʿ/fasād 50/50 makes dunya/akhira
-  133 vs 250) — visible in the matrix below as the absence of any solid vertical stripe.
+  133 vs 250) — visible in the matrix above as the absence of any solid vertical stripe.
   Computation: notebook 04 §8.
 - **The most famous claims split.** 115/115, 88/88, 25/25 (Adam/Isa) and qul/qālū 332/332 hold
   cleanly; **ḥayāt/mawt 145/145 — equally famous — reproduces under nothing** (lemmas 76/50,
@@ -267,28 +263,26 @@ Observations the verdict column compresses:
 - **The viral sea/land 32 : 13 reproduces under "singular + definite article" — but** the 13
   includes 52:28, the divine name *al-Barr* ("the Most Kind"), not the word "land" (the land
   count is 12, §2.3); and the percentage step (32⁄45 = 71.1% "= Earth's water share") is an
-  inference no word count can carry.
+  inference no word count can carry — as with every interpretive layer on these claims
+  (= days of the year, = number of surahs, = chromosome count), a separate, non-arithmetic
+  assertion that a frequency table can neither confirm nor refute.
 - **Three pairs nobody seems to verify hold exactly at the root level:** nafʿ/fasād 50/50,
   jahr/ʿalāniya 16/16, lisān/mawʿiẓa 25/25.
-- **Look-elsewhere effect, stated plainly:** each claim was tested against ~11 methods, so a
-  single match is weak evidence by itself. The value of the audit is that the method behind
-  every number is now explicit and reproducible — including for the claims that hold.
-- **Counts are not inferences.** Where a count reproduces, any claim built on top of it
-  (= days of the year, = number of surahs, = Earth's water ratio, = chromosome count) is a
-  separate, non-arithmetic assertion that a frequency table can neither confirm nor refute.
+- **Look-elsewhere effect:** each claim faces 13 named methods (10 applicable on average), so
+  a single match is weak evidence by itself — quantified in §5.1. The value of the audit is
+  that the method behind every number is now explicit and reproducible, including for the
+  claims that hold.
 - **Validation scope:** claim words outside the 38-word set (nafʿ, fasād, lisān, …) receive
-  the same validation as the 38: every location any audit method counts is token-validated
-  against the Uthmani text, and all 22 additional roots match the corpus website's current
-  revision exactly (§4; notebook 04 §§9–10;
+  the same validation as the 38 (§4; notebook 04 §§9–10;
   [`output/claims_occurrences.csv`](output/claims_occurrences.csv)).
 
 ### 5.1 How surprising is an equality? Base rates
 
-**Takeaway: exact count equalities are abundant in this corpus — 1 in 11 arbitrary word
-pairs can be made exactly equal by some counting method — so a list of discovered equal pairs
-is not, by itself, evidence of anything beyond the search that produced it.** The popular
-argument "so many equalities cannot be coincidence" does not survive quantification. This is
-a property of natural-language word-frequency statistics generally, not of the Quran
+**Takeaway: exact count equalities are abundant in this corpus — among reasonably frequent
+words (count ≥ 10), 1 in 11 arbitrary pairs can be made exactly equal by at least one of 10
+uniform counting methods, and the rate rises for rarer words — so a list of discovered equal
+pairs is not, by itself, evidence of anything beyond the search that produced it.** This is a
+property of natural-language word-frequency statistics generally, not of the Quran
 specifically.
 
 The analysis lives in [`notebooks/05_base_rates.ipynb`](notebooks/05_base_rates.ipynb);
@@ -297,9 +291,9 @@ one-line results:
 | Analysis (notebook §) | Result |
 |---|---|
 | Count collisions (§1) | 8,594 exactly-equal pairs among lemmas with count ≥ 10; every celebrated value has other words on it (88 has 4, 25 has 12) — [`count_multiplicity.csv`](output/count_multiplicity.csv) |
-| Zipf fit (§2) | slope −1.10, the shape characteristic of natural language; the crowded low counts are why collisions abound — [`zipf_rank_frequency.png`](output/zipf_rank_frequency.png) |
+| Zipf fit (§2) | slope ≈ −1.1 (range-sensitive: −0.9 to −1.2 across fit windows), the shape characteristic of natural language; the crowded low counts are why collisions abound — [`zipf_rank_frequency.png`](output/zipf_rank_frequency.png) |
 | Near-miss sensitivity (§3) | failed claims split into near misses (jazāʾ/maghfira off by 1) and decisive failures (ḥayāt/mawt off by 39) — [`claims_near_miss.csv`](output/claims_near_miss.csv) |
-| Null model, exhaustive (§5) | 9.2% of all 365,085 pairs equalizable by some method; the audited pairs hit 41% (~4.5×) — the enrichment survivorship selection produces |
+| Null model, exhaustive (§5) | 9.2% of all 365,085 pairs (lemmas with count ≥ 10) equalizable by some method. Audited pairs, stratified: 5/10 = 50% (~5×) inside that population; 2/7 among rarer-word pairs, whose null itself rises to 14–18%+ — the enrichment survivorship selection produces |
 
 What the base rates do **not** show: they demonstrate that the observed equalities require no
 special explanation, not that no design exists — selection and design are observationally
@@ -310,14 +304,20 @@ identical here.
 All counts above rest on one team's annotation decisions. **QuranMorph** [11] is the only
 machine-readable morphological annotation of the Quran produced independently of the Quranic
 Arabic Corpus: three linguists at Birzeit University manually lemmatized all 77,429 words
-against the Qabas lexicon (CC BY 4.0; committed verbatim in `data/quranmorph/`). Notebook
+against the Qabas lexicon (committed in `data/quranmorph/`; licensing in §10). Notebook
 [`06_quranmorph_crosscheck.ipynb`](notebooks/06_quranmorph_crosscheck.ipynb) re-examines this
-project's counts under it. The two corpora align word-for-word (same 77,429 words, identical
-verse/word indexing), so every comparison is occurrence-aligned rather than spelling-matched.
+project's counts under it. The two corpora align word-for-word — verified position by
+position, not assumed: equal word counts in all 6,236 verses, and 77,218 of 77,429 word
+strings identical as letter skeletons, with all 211 exceptions being text artifacts of the
+QuranMorph distribution rather than boundary disagreements — so every comparison is
+occurrence-aligned rather than spelling-matched.
 
 - **50 of 58 word selections agree exactly** (yawm 405, raḥma 114, shaytan 88, Adam 25,
-  Isa 25, …); the 8 boundary differences are all systematic lexicon-design merges/splits, each
-  examined individually ([`quranmorph_lemma_map.csv`](output/quranmorph_lemma_map.csv)).
+  Isa 25, …), counting as totals over the QuranMorph lemmas covering the same occurrences
+  (QuranMorph sometimes splits a word across two lemmas, e.g. malak 67 + 21 = 88). The 8
+  differences are systematic lexicon-design differences — seven merges plus the Akhira
+  feature-scheme case below — each examined individually
+  ([`quranmorph_lemma_map.csv`](output/quranmorph_lemma_map.csv)).
 - **The audit corrections of §2 are independently corroborated**: QuranMorph splits *barr*
   into land = 12 and dutiful/righteous = 10 — the same 12 + 10 split as §2.3 — and it too
   files the 13 plural "bones" occurrences under the "great" lemma (§2.1). Two independent
@@ -359,18 +359,15 @@ much rests on editorial choices.
   standard reference is ʿAbd al-Bāqī's concordance [9], compiled by hand, which underlies most
   published figures. This project is the same exercise done against a machine-readable,
   morphologically tagged text, where every methodological choice is explicit and re-runnable.
-- **Popular "numerical balance" claims.** The word-pair genre (dunya/akhira, angels/devils,
-  life/death appearing equally often) was popularized by Nawfal [10] and circulates widely,
-  almost always without a stated counting method. Section 5 audits 31 circulating claims
-  against every method in the grid; published critiques [13, 14] quote the claims precisely
-  but had not, to our knowledge, been answered with a systematic per-claim, per-method table.
-  This project neither set out to confirm nor refute the genre — it reports what a tagged
-  corpus yields under uniform, stated rules.
+- **Popular "numerical balance" claims.** The word-pair genre was popularized by Nawfal [10];
+  published critiques [13, 14] quote the claims precisely but had not, to our knowledge, been
+  answered with a systematic per-claim, per-method table (§5). This project neither set out to
+  confirm nor refute the genre — it reports what a tagged corpus yields under uniform, stated
+  rules.
 - **Computational resources.** The Quranic Arabic Corpus and its annotation methodology
-  [1, 8] are the foundation; Tanzil [3] provides the underlying verified text; JQuranTree [4],
-  QuranTree.jl [5], and python-qurancorpus [6] are the existing programmatic interfaces.
-  QuranMorph [11] is a recent independently produced morphological annotation of the Quran,
-  used here as a cross-annotation check (§5.2).
+  [1, 8] are the foundation; Tanzil [3] provides the underlying verified text; QuranMorph [11]
+  is the independently produced annotation used for the cross-check (§5.2). Programmatic
+  interfaces are compared in §3.4.
 - **Earlier iteration of this repository.** Notebooks 01/02 predate the audit; their published
   figures contained the errors documented in §2 and have been corrected in place.
 
@@ -381,9 +378,8 @@ much rests on editorial choices.
 - **Cross-resource comparison** — the QuranMorph comparison is done (§5.2); remaining:
   quantify divergences against the website's current revision and ʿAbd al-Bāqī [9], and extend
   the QuranMorph comparison beyond the 58 selections to the full vocabulary.
-- **Semantic disambiguation** — the Barr land/righteous split (§2.3) is form-based; a
-  context- or tafsir-informed classification of polysemous lemmas would let counts be reported
-  per sense rather than per form.
+- **Semantic disambiguation** — a context- or tafsir-informed classification of polysemous
+  lemmas (e.g. barr, §2.3) would let counts be reported per sense rather than per form.
 - **Continuous verification** — run the test suite and token-level validation automatically on
   every change (CI), so the pinned numbers cannot drift silently.
 
@@ -396,27 +392,26 @@ permits verbatim copies — see [Data](#10-data-and-licensing)), so a fresh clon
 git clone <this-repo> && cd quran-frequencies
 uv sync
 uv run jupyter notebook        # run the notebooks
-uv run --extra dev pytest      # run the test suite (44 tests)
+uv run --extra dev pytest      # run the test suite (54 tests)
 ```
 
 | Path | Contents |
 |---|---|
 | `notebooks/01_explore_and_discover.ipynb` | Lemma discovery per word, validation against sample verses, the four-method count |
 | `notebooks/02_results_and_exploration.ipynb` | Pair tables, embryology sequence, open-ended exploration |
-| `notebooks/03_audit_and_full_recount.ipynb` | **Authoritative for the 38 words**: audit evidence, full method grid, root listings, Qaala breakdown, validation record, chart generation |
-| `notebooks/04_claims_audit.ipynb` | **Claims audit** (§5): claims registry with sources, every claim under every method, verdicts, per-claim forensics |
-| `output/full_counts.csv` | The complete method grid, one row per word |
-| `output/occurrences.csv` | Every counted occurrence with chapter:verse:word location |
-| `output/claims_occurrences.csv` | Same, for every location any claims-audit method counts |
+| `notebooks/03_audit_and_full_recount.ipynb` | **Authoritative for the 38 words**: audit evidence, full method grid, root listings, Qaala breakdown, validation record, pairs figure |
+| `notebooks/04_claims_audit.ipynb` | **Claims audit** (§5): claims registry with sources, every claim under every method, verdicts, per-claim forensics, matrix figure |
 | `notebooks/05_base_rates.ipynb` | **Base rates** (§5.1): count-collision statistics, Zipf fit, near-miss sensitivity, exhaustive null model |
-| `notebooks/06_quranmorph_crosscheck.ipynb` | **Cross-annotation check** (§5.2): all 58 selections and the claim verdicts re-examined under QuranMorph |
-| `output/quranmorph_lemma_map.csv`, `output/quranmorph_crosscheck.csv` | Cross-annotation artifacts (regenerated by notebook 06) |
-| `output/count_multiplicity.csv`, `output/claims_near_miss.csv`, `output/zipf_rank_frequency.png` | Base-rate artifacts (regenerated by notebook 05) |
+| `notebooks/06_quranmorph_crosscheck.ipynb` | **Cross-annotation check** (§5.2): word-level alignment verification, all 58 selections and the claim verdicts under QuranMorph |
+| `output/full_counts.csv` | The complete method grid, one row per word |
+| `output/occurrences.csv`, `output/claims_occurrences.csv` | Every counted occurrence with chapter:verse:word location (38 words / claims audit) |
 | `output/claims_audit.csv` | One row per claim: claimed numbers, verdict, methods it reproduces under, sources, notes |
 | `output/claims_audit_grid.csv` | Every claim × every method × both sides, with match flags |
-| `output/pairs_bars.png`, `output/pairs_table.png` | Charts (regenerated by notebook 03) |
-| `src/parser.py`, `src/buckwalter.py` | Morphology TSV parser; Buckwalter ↔ Arabic conversion |
-| `tests/` | Unit tests (16-line verbatim fixture) + integration tests (pinned audited counts) |
+| `output/quranmorph_lemma_map.csv`, `output/quranmorph_crosscheck.csv` | Cross-annotation artifacts |
+| `output/count_multiplicity.csv`, `output/claims_near_miss.csv` | Base-rate artifacts |
+| `output/pairs.png`, `output/claims_audit_matrix.png`, `output/zipf_rank_frequency.png` | Figures |
+| `src/parser.py`, `src/buckwalter.py`, `src/plotstyle.py` | Morphology TSV parser; Buckwalter ↔ Arabic conversion; shared chart style |
+| `tests/` | Unit tests (15-record verbatim fixture) + integration tests (pinned audited counts) |
 | `validation/` | Token-level validation scripts (Python + Java) and report |
 
 Everything in `output/` regenerates by running notebooks 03–06 top to bottom. The token
@@ -506,4 +501,5 @@ consonant map (vowels/diacritics omitted here; full map in `src/buckwalter.py`):
 | $ | ش | | S | ص | | D | ض | | k | ك |
 
 Corpus-specific extensions: `^` maddah, `` ` `` dagger alif, `{` alif wasla, `p` tāʾ marbūṭa,
-`Y` alif maqṣūra, hamza seats `' > < & }`.
+`Y` alif maqṣūra, hamza seats `' > < & }`, and the QAC extended set for Uthmani orthography
+signs (small wāw/yāʾ/nūn, quranic stop marks — full map in `src/buckwalter.py`).

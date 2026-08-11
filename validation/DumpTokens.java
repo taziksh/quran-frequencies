@@ -24,6 +24,10 @@ public class DumpTokens {
                 // Raw verse text split on spaces; normalization happens on the Python side.
                 // (Some Uthmani marks, e.g. the silent-alif U+06DF, break JQuranTree's
                 // per-character transforms, so we avoid removeDiacritics/removeNonLetters.)
+                // Known limit: in 37:130 the morphology's word 3 (Ilyasin) is written as
+                // TWO space-separated words in the Uthmani text, so word indices in that
+                // verse diverge from word 3 on. No currently counted location falls there;
+                // if one ever does, it will surface loudly as a mismatch, not pass silently.
                 String token = "<MISSING>";
                 try {
                     String[] tokens = Document.getVerse(c, v).toUnicode().split(" ");

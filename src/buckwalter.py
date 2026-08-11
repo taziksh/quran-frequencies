@@ -48,6 +48,23 @@ BW_TO_AR = {
     "o": "\u0652",  # sukun
     "`": "\u0670",  # superscript alif
     "{": "\u0671",  # alif wasla
+    # QAC extended Buckwalter: Uthmani orthography signs (matches JQuranTree's
+    # BuckwalterEncoding; '|' above is standard Buckwalter but unused by QAC,
+    # which writes alif+maddah as "A^")
+    "^": "\u0653",  # maddah above
+    "#": "\u0654",  # hamza above
+    ":": "\u06dc",  # small high seen
+    "@": "\u06df",  # small high rounded zero
+    '"': "\u06e0",  # small high upright rectangular zero
+    "[": "\u06e2",  # small high meem (isolated form)
+    ";": "\u06e3",  # small low seen
+    ",": "\u06e5",  # small waw
+    ".": "\u06e6",  # small yeh
+    "!": "\u06e8",  # small high noon
+    "-": "\u06ea",  # empty centre low stop
+    "+": "\u06eb",  # empty centre high stop
+    "%": "\u06ec",  # rounded high stop with filled centre
+    "]": "\u06ed",  # small low meem
 }
 
 AR_TO_BW = {v: k for k, v in BW_TO_AR.items()}

@@ -1,5 +1,5 @@
 # Verbatim excerpt of quranic-corpus-morphology-0.4.txt (Quranic Arabic Corpus,
-# (C) 2011 Kais Dukes, GNU GPL) for unit tests. 14 lines covering: prefixes,
+# (C) 2011 Kais Dukes, GNU GPL) for unit tests. 15 records covering: prefixes,
 # suffixes, nouns, proper nouns, adjectives, demonstratives, verbs (perfect,
 # imperative, imperfect+jussive, form IV), participles, plural/dual flags, and
 # the bones-under-EaZiym tagging quirk.
